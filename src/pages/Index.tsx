@@ -1,19 +1,33 @@
-import Navbar from "@/components/Navbar";
-import Hero from "@/components/Hero";
-import Features from "@/components/Features";
-import Benefits from "@/components/Benefits";
-import Stats from "@/components/Stats";
-import CTA from "@/components/CTA";
-import Footer from "@/components/Footer";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { getSubdomainInfo, getTenantSlugFromPath } from "@/lib/subdomain";
+import { Loader2 } from "lucide-react";
+import Launcher from "./Launcher";
+
 const Index = () => {
-  return <div className="min-h-screen w-full">
-      <Navbar />
-      <Hero />
-      
-      <Features />
-      <Benefits />
-      
-      
-    </div>;
+  const navigate = useNavigate();
+  const subdomainInfo = getSubdomainInfo();
+  const tenantSlug = getTenantSlugFromPath();
+
+  useEffect(() => {
+    // If we're on a tool subdomain with a tenant, redirect to the tool
+    if (subdomainInfo.toolName && tenantSlug) {
+      const toolRoute = `/${subdomainInfo.toolName}`;
+      navigate(toolRoute);
+    }
+  }, [subdomainInfo.toolName, tenantSlug, navigate]);
+
+  // If we're on root domain or localhost, show the launcher
+  if (subdomainInfo.isRootDomain) {
+    return <Launcher />;
+  }
+
+  // While redirecting, show loading
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-background">
+      <Loader2 className="h-8 w-8 animate-spin text-primary" />
+    </div>
+  );
 };
+
 export default Index;

@@ -3,7 +3,9 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { TenantProvider } from "./contexts/TenantContext";
 import Index from "./pages/Index";
+import Launcher from "./pages/Launcher";
 import NotFound from "./pages/NotFound";
 import Depreciation from "./pages/depreciation";
 import Invoicing from "./pages/invoicing";
@@ -38,11 +40,17 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
+      <TenantProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/launcher" element={<Launcher />} />
+            
+            {/* Tool-specific routes with tenant context */}
+            <Route path="/tools/:tool/:tenant/*" element={<Index />} />
+            <Route path="/:tenant/*" element={<Index />} />
           <Route path="/login" element={<Login />} />
           <Route path="/auth/confirm" element={<AuthConfirm />} />
           <Route path="/profile" element={<Profile />} />
@@ -72,8 +80,9 @@ const App = () => (
           <Route path="/admin" element={<Admin />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+          </Routes>
+        </BrowserRouter>
+      </TenantProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );

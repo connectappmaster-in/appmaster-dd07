@@ -1551,6 +1551,71 @@ export type Database = {
         }
         Relationships: []
       }
+      tenant_users: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          tenant_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          tenant_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          tenant_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tenant_users_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tenants: {
+        Row: {
+          created_at: string
+          domain: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          settings: Json | null
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          domain?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          settings?: Json | null
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          domain?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          settings?: Json | null
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       ticket_comments: {
         Row: {
           author_id: string
@@ -1732,24 +1797,33 @@ export type Database = {
           created_at: string | null
           description: string | null
           display_name: string
+          icon: string | null
           id: string
           is_active: boolean | null
+          route_prefix: string | null
+          subdomain: string | null
         }
         Insert: {
           category: string
           created_at?: string | null
           description?: string | null
           display_name: string
+          icon?: string | null
           id?: string
           is_active?: boolean | null
+          route_prefix?: string | null
+          subdomain?: string | null
         }
         Update: {
           category?: string
           created_at?: string | null
           description?: string | null
           display_name?: string
+          icon?: string | null
           id?: string
           is_active?: boolean | null
+          route_prefix?: string | null
+          subdomain?: string | null
         }
         Relationships: []
       }
@@ -1957,8 +2031,21 @@ export type Database = {
     Functions: {
       generate_ticket_number: { Args: never; Returns: string }
       has_role: { Args: { _role: string; _user_id: string }; Returns: boolean }
+      has_tenant_access: {
+        Args: { _tenant_id: string; _user_id: string }
+        Returns: boolean
+      }
+      has_tenant_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _tenant_id: string
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
+      app_role: "super_admin" | "tenant_admin" | "user"
       applicable_law: "Companies Act" | "Income Tax Act" | "Both"
       availability_status: "Available" | "Busy" | "Away" | "Offline"
       depreciation_method: "SLM" | "WDV"
@@ -2093,6 +2180,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      app_role: ["super_admin", "tenant_admin", "user"],
       applicable_law: ["Companies Act", "Income Tax Act", "Both"],
       availability_status: ["Available", "Busy", "Away", "Offline"],
       depreciation_method: ["SLM", "WDV"],

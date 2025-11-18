@@ -955,6 +955,457 @@ export type Database = {
           },
         ]
       }
+      saas_api_keys: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          expires_at: string | null
+          id: string
+          is_active: boolean | null
+          last_used_at: string | null
+          organisation_id: string | null
+          scopes: string[] | null
+          token: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_used_at?: string | null
+          organisation_id?: string | null
+          scopes?: string[] | null
+          token: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_used_at?: string | null
+          organisation_id?: string | null
+          scopes?: string[] | null
+          token?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "saas_api_keys_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "saas_users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "saas_api_keys_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "saas_organisations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      saas_billing_history: {
+        Row: {
+          amount: number
+          bill_period_end: string
+          bill_period_start: string
+          created_at: string | null
+          id: string
+          invoice_url: string | null
+          organisation_id: string | null
+          payment_provider: string | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          amount: number
+          bill_period_end: string
+          bill_period_start: string
+          created_at?: string | null
+          id?: string
+          invoice_url?: string | null
+          organisation_id?: string | null
+          payment_provider?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          amount?: number
+          bill_period_end?: string
+          bill_period_start?: string
+          created_at?: string | null
+          id?: string
+          invoice_url?: string | null
+          organisation_id?: string | null
+          payment_provider?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "saas_billing_history_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "saas_organisations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      saas_feature_flags: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          enabled_for_orgs: string[] | null
+          enabled_for_plans: string[] | null
+          feature_key: string
+          feature_name: string
+          id: string
+          is_global_enabled: boolean | null
+          rollout_percentage: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          enabled_for_orgs?: string[] | null
+          enabled_for_plans?: string[] | null
+          feature_key: string
+          feature_name: string
+          id?: string
+          is_global_enabled?: boolean | null
+          rollout_percentage?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          enabled_for_orgs?: string[] | null
+          enabled_for_plans?: string[] | null
+          feature_key?: string
+          feature_name?: string
+          id?: string
+          is_global_enabled?: boolean | null
+          rollout_percentage?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      saas_org_user_links: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          org_role: string | null
+          organisation_id: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          org_role?: string | null
+          organisation_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          org_role?: string | null
+          organisation_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "saas_org_user_links_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "saas_organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "saas_org_user_links_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "saas_users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      saas_organisations: {
+        Row: {
+          active_users_count: number | null
+          billing_cycle: string | null
+          created_at: string | null
+          custom_domain: string | null
+          id: string
+          logo_url: string | null
+          max_users_allowed: number | null
+          name: string
+          next_billing_date: string | null
+          onboarding_completed: boolean | null
+          plan_name: string | null
+          status: string | null
+          stripe_customer_id: string | null
+          subscription_plan_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          active_users_count?: number | null
+          billing_cycle?: string | null
+          created_at?: string | null
+          custom_domain?: string | null
+          id?: string
+          logo_url?: string | null
+          max_users_allowed?: number | null
+          name: string
+          next_billing_date?: string | null
+          onboarding_completed?: boolean | null
+          plan_name?: string | null
+          status?: string | null
+          stripe_customer_id?: string | null
+          subscription_plan_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          active_users_count?: number | null
+          billing_cycle?: string | null
+          created_at?: string | null
+          custom_domain?: string | null
+          id?: string
+          logo_url?: string | null
+          max_users_allowed?: number | null
+          name?: string
+          next_billing_date?: string | null
+          onboarding_completed?: boolean | null
+          plan_name?: string | null
+          status?: string | null
+          stripe_customer_id?: string | null
+          subscription_plan_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "saas_organisations_subscription_plan_id_fkey"
+            columns: ["subscription_plan_id"]
+            isOneToOne: false
+            referencedRelation: "subscription_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      saas_system_logs: {
+        Row: {
+          description: string | null
+          entity_id: string | null
+          entity_type: string | null
+          event_type: string
+          id: string
+          metadata: Json | null
+          performed_by: string | null
+          timestamp: string | null
+        }
+        Insert: {
+          description?: string | null
+          entity_id?: string | null
+          entity_type?: string | null
+          event_type: string
+          id?: string
+          metadata?: Json | null
+          performed_by?: string | null
+          timestamp?: string | null
+        }
+        Update: {
+          description?: string | null
+          entity_id?: string | null
+          entity_type?: string | null
+          event_type?: string
+          id?: string
+          metadata?: Json | null
+          performed_by?: string | null
+          timestamp?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "saas_system_logs_performed_by_fkey"
+            columns: ["performed_by"]
+            isOneToOne: false
+            referencedRelation: "saas_users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      saas_usage_metrics: {
+        Row: {
+          id: string
+          metadata: Json | null
+          metric_type: string
+          metric_unit: string | null
+          metric_value: number
+          organisation_id: string | null
+          recorded_at: string | null
+        }
+        Insert: {
+          id?: string
+          metadata?: Json | null
+          metric_type: string
+          metric_unit?: string | null
+          metric_value: number
+          organisation_id?: string | null
+          recorded_at?: string | null
+        }
+        Update: {
+          id?: string
+          metadata?: Json | null
+          metric_type?: string
+          metric_unit?: string | null
+          metric_value?: number
+          organisation_id?: string | null
+          recorded_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "saas_usage_metrics_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "saas_organisations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      saas_users: {
+        Row: {
+          auth_user_id: string | null
+          created_at: string | null
+          email: string
+          global_status: string | null
+          id: string
+          last_login_at: string | null
+          multi_org: boolean | null
+          phone: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          auth_user_id?: string | null
+          created_at?: string | null
+          email: string
+          global_status?: string | null
+          id?: string
+          last_login_at?: string | null
+          multi_org?: boolean | null
+          phone?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          auth_user_id?: string | null
+          created_at?: string | null
+          email?: string
+          global_status?: string | null
+          id?: string
+          last_login_at?: string | null
+          multi_org?: boolean | null
+          phone?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      saas_webhooks: {
+        Row: {
+          created_at: string | null
+          event_triggers: string[] | null
+          id: string
+          last_triggered_at: string | null
+          organisation_id: string | null
+          retry_count: number | null
+          secret: string
+          status: string | null
+          updated_at: string | null
+          url: string
+        }
+        Insert: {
+          created_at?: string | null
+          event_triggers?: string[] | null
+          id?: string
+          last_triggered_at?: string | null
+          organisation_id?: string | null
+          retry_count?: number | null
+          secret: string
+          status?: string | null
+          updated_at?: string | null
+          url: string
+        }
+        Update: {
+          created_at?: string | null
+          event_triggers?: string[] | null
+          id?: string
+          last_triggered_at?: string | null
+          organisation_id?: string | null
+          retry_count?: number | null
+          secret?: string
+          status?: string | null
+          updated_at?: string | null
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "saas_webhooks_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "saas_organisations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      saas_worker_jobs: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          id: string
+          job_type: string
+          last_error: string | null
+          max_retries: number | null
+          payload: Json | null
+          retries: number | null
+          started_at: string | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          job_type: string
+          last_error?: string | null
+          max_retries?: number | null
+          payload?: Json | null
+          retries?: number | null
+          started_at?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          job_type?: string
+          last_error?: string | null
+          max_retries?: number | null
+          payload?: Json | null
+          retries?: number | null
+          started_at?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       subscription_plans: {
         Row: {
           created_at: string | null
@@ -963,10 +1414,12 @@ export type Database = {
           features: Json
           id: string
           is_active: boolean | null
+          max_storage_mb: number | null
           max_tools: number
           max_users: number
           monthly_price: number
           plan_name: string
+          plan_tier: string | null
           sort_order: number | null
           updated_at: string | null
           yearly_price: number
@@ -978,10 +1431,12 @@ export type Database = {
           features?: Json
           id?: string
           is_active?: boolean | null
+          max_storage_mb?: number | null
           max_tools?: number
           max_users?: number
           monthly_price?: number
           plan_name: string
+          plan_tier?: string | null
           sort_order?: number | null
           updated_at?: string | null
           yearly_price?: number
@@ -993,10 +1448,12 @@ export type Database = {
           features?: Json
           id?: string
           is_active?: boolean | null
+          max_storage_mb?: number | null
           max_tools?: number
           max_users?: number
           monthly_price?: number
           plan_name?: string
+          plan_tier?: string | null
           sort_order?: number | null
           updated_at?: string | null
           yearly_price?: number
@@ -1056,6 +1513,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      super_admin_users: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          permissions: string[] | null
+          role: Database["public"]["Enums"]["super_admin_role"]
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          permissions?: string[] | null
+          role: Database["public"]["Enums"]["super_admin_role"]
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          permissions?: string[] | null
+          role?: Database["public"]["Enums"]["super_admin_role"]
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
       }
       team_groups: {
         Row: {
@@ -1411,9 +1898,20 @@ export type Database = {
         }
         Returns: boolean
       }
+      has_super_admin_permission: {
+        Args: { _permission: string; _user_id: string }
+        Returns: boolean
+      }
+      is_super_admin: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
       app_role: "super_admin" | "admin" | "manager" | "user"
+      super_admin_role:
+        | "super_admin"
+        | "saas_manager"
+        | "saas_support_agent"
+        | "billing_manager"
+        | "read_only_auditor"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1542,6 +2040,13 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["super_admin", "admin", "manager", "user"],
+      super_admin_role: [
+        "super_admin",
+        "saas_manager",
+        "saas_support_agent",
+        "billing_manager",
+        "read_only_auditor",
+      ],
     },
   },
 } as const

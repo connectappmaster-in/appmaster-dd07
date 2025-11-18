@@ -270,6 +270,15 @@ const Login = () => {
                   {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Sign In
                 </Button>
+
+                <Button
+                  type="button"
+                  variant="link"
+                  className="w-full"
+                  onClick={() => navigate('/password-reset')}
+                >
+                  Forgot password?
+                </Button>
               </form>
             </TabsContent>
 

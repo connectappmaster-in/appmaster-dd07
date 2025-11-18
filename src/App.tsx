@@ -1,11 +1,10 @@
+import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { TenantProvider } from "./contexts/TenantContext";
 import Index from "./pages/Index";
-import Launcher from "./pages/Launcher";
 import NotFound from "./pages/NotFound";
 import Depreciation from "./pages/depreciation";
 import Invoicing from "./pages/invoicing";
@@ -18,12 +17,9 @@ import ShopIncomeExpense from "./pages/shop-income-expense";
 import Inventory from "./pages/inventory";
 import CRM from "./pages/crm";
 import LeadsListPage from "./pages/crm/leads";
-import LeadDetailPage from "./pages/crm/leads/[id]";
 import NewLeadPage from "./pages/crm/leads/new";
 import CustomersListPage from "./pages/crm/customers";
-import CustomerDetailPage from "./pages/crm/customers/[id]";
 import OpportunitiesPage from "./pages/crm/opportunities";
-import OpportunityDetailPage from "./pages/crm/opportunities/[id]";
 import QuotesListPage from "./pages/crm/quotes";
 import Marketing from "./pages/marketing";
 import PersonalExpense from "./pages/personal-expense";
@@ -34,25 +30,33 @@ import AuthConfirm from "./pages/AuthConfirm";
 
 import Profile from "./pages/Profile";
 import InitializeAdmin from "./pages/InitializeAdmin";
+import PasswordReset from "./pages/PasswordReset";
+import ResetPasswordConfirm from "./pages/ResetPasswordConfirm";
+import AcceptInvitation from "./pages/AcceptInvitation";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5,
+      retry: 1,
+    },
+  },
+});
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <TenantProvider>
+const App = () => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
         <Toaster />
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/launcher" element={<Launcher />} />
-            
-            {/* Tool-specific routes with tenant context */}
-            <Route path="/tools/:tool/:tenant/*" element={<Index />} />
-            <Route path="/:tenant/*" element={<Index />} />
+          <Route path="/" element={<Index />} />
           <Route path="/login" element={<Login />} />
           <Route path="/auth/confirm" element={<AuthConfirm />} />
+          <Route path="/password-reset" element={<PasswordReset />} />
+          <Route path="/reset-password-confirm" element={<ResetPasswordConfirm />} />
+          <Route path="/accept-invitation" element={<AcceptInvitation />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/settings" element={<Profile />} />
           <Route path="/initialize-admin" element={<InitializeAdmin />} />
@@ -68,11 +72,8 @@ const App = () => (
           <Route path="/crm" element={<CRM />} />
           <Route path="/crm/leads" element={<LeadsListPage />} />
           <Route path="/crm/leads/new" element={<NewLeadPage />} />
-          <Route path="/crm/leads/:id" element={<LeadDetailPage />} />
           <Route path="/crm/customers" element={<CustomersListPage />} />
-          <Route path="/crm/customers/:id" element={<CustomerDetailPage />} />
           <Route path="/crm/opportunities" element={<OpportunitiesPage />} />
-          <Route path="/crm/opportunities/:id" element={<OpportunityDetailPage />} />
           <Route path="/crm/quotes" element={<QuotesListPage />} />
           <Route path="/marketing" element={<Marketing />} />
           <Route path="/personal-expense" element={<PersonalExpense />} />
@@ -80,11 +81,11 @@ const App = () => (
           <Route path="/admin" element={<Admin />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TenantProvider>
+        </Routes>
+      </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
-);
+  );
+};
 
 export default App;

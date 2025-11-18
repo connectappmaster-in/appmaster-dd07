@@ -61,44 +61,19 @@ const Profile = () => {
 
       const { data: profile } = await supabase
         .from("profiles")
-        .select("full_name, avatar_url")
+        .select("first_name, last_name, avatar_url")
         .eq("id", user.id)
         .single();
 
       if (profile) {
-        setFullName(profile.full_name || "");
+        setFullName(`${profile.first_name || ''} ${profile.last_name || ''}`.trim());
         setAvatarUrl(profile.avatar_url || "");
       }
 
-      // @ts-ignore
-      const { data: prefs } = await supabase
-        .from("user_preferences")
-        .select("*")
-        .eq("user_id", user.id)
-        .single();
-
-      if (prefs) {
-        setPreferences({
-          // @ts-ignore
-          email_notifications: prefs.email_notifications,
-          // @ts-ignore
-          push_notifications: prefs.push_notifications,
-          // @ts-ignore
-          marketing_emails: prefs.marketing_emails,
-          // @ts-ignore
-          language: prefs.language,
-          // @ts-ignore
-          timezone: prefs.timezone,
-          // @ts-ignore
-          theme: prefs.theme,
-        });
-      }
-
-      // @ts-ignore
       const { data: subs } = await supabase
         .from("subscriptions")
-        .select(`*,tools:tool_id(display_name,category)`)
-        .eq("user_id", user.id);
+        .select("*")
+        .eq("organisation_id", user.id);
 
       if (subs) {
         setSubscriptions(subs);
@@ -189,12 +164,8 @@ const Profile = () => {
 
     setSaving(true);
     try {
-      // @ts-ignore
-      const { error } = await supabase
-        .from("user_preferences")
-        .upsert({ user_id: user.id, ...preferences });
-
-      if (error) throw error;
+      // Save preferences locally for now (user_preferences table doesn't exist yet)
+      localStorage.setItem(`preferences_${user.id}`, JSON.stringify(preferences));
 
       toast({
         title: "Success",

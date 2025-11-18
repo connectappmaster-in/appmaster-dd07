@@ -33,6 +33,7 @@ import InitializeAdmin from "./pages/InitializeAdmin";
 import PasswordReset from "./pages/PasswordReset";
 import ResetPasswordConfirm from "./pages/ResetPasswordConfirm";
 import AcceptInvitation from "./pages/AcceptInvitation";
+import SuperAdmin from "./pages/super-admin/index";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -79,6 +80,7 @@ const App = () => {
           <Route path="/personal-expense" element={<PersonalExpense />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/super-admin" element={<SuperAdmin />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

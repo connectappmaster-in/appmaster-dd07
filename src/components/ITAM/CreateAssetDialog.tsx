@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -9,7 +10,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Loader2 } from "lucide-react";
+import { Loader2, ImagePlus } from "lucide-react";
+import { ImagePickerDialog } from "./ImagePickerDialog";
 const assetSchema = z.object({
   asset_id: z.string().min(1, "Asset ID is required"),
   brand: z.string().min(1, "Brand is required"),
@@ -36,6 +38,7 @@ export const CreateAssetDialog = ({
   onOpenChange
 }: CreateAssetDialogProps) => {
   const queryClient = useQueryClient();
+  const [imagePickerOpen, setImagePickerOpen] = useState(false);
   const form = useForm<z.infer<typeof assetSchema>>({
     resolver: zodResolver(assetSchema),
     defaultValues: {
@@ -331,14 +334,39 @@ export const CreateAssetDialog = ({
 
             {/* Photo Section */}
             <div>
-              
+              <h3 className="text-xs font-semibold mb-1.5 text-muted-foreground uppercase">Asset Image</h3>
               <FormField control={form.control} name="photo_url" render={({
               field
             }) => <FormItem>
-                    <FormLabel className="text-xs">Add Image</FormLabel>
-                    <FormControl>
-                      <Input type="text" className="h-8" {...field} />
-                    </FormControl>
+                    <FormLabel className="text-xs">Image</FormLabel>
+                    <div className="flex gap-2">
+                      <FormControl>
+                        <Input 
+                          type="text" 
+                          className="h-8" 
+                          placeholder="Image URL or click Browse to select"
+                          {...field} 
+                        />
+                      </FormControl>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setImagePickerOpen(true)}
+                      >
+                        <ImagePlus className="h-4 w-4 mr-1" />
+                        Browse
+                      </Button>
+                    </div>
+                    {field.value && (
+                      <div className="mt-2 relative w-32 h-32 rounded-md border overflow-hidden">
+                        <img 
+                          src={field.value} 
+                          alt="Preview" 
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )}
                     <FormMessage />
                   </FormItem>} />
             </div>
@@ -354,6 +382,13 @@ export const CreateAssetDialog = ({
             </div>
           </form>
         </Form>
+
+        <ImagePickerDialog
+          open={imagePickerOpen}
+          onOpenChange={setImagePickerOpen}
+          onImageSelect={(url) => form.setValue("photo_url", url)}
+          currentImage={form.watch("photo_url")}
+        />
       </DialogContent>
     </Dialog>;
 };

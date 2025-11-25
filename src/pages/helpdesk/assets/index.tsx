@@ -159,7 +159,7 @@ const ITAMDashboard = () => {
     {
       label: "Tools",
       icon: Settings,
-      onClick: () => navigate("/helpdesk/assets/explore/tools"),
+      onClick: () => navigate("/helpdesk/assets/tools"),
     },
   ];
 

@@ -293,7 +293,7 @@ export const AssetsList = ({ status, filters = {}, onSelectionChange }: AssetsLi
                   className="h-7 px-2 -ml-2 hover:bg-muted"
                   onClick={() => handleSort('brand')}
                 >
-                  BRAND
+                  MAKE
                   {getSortIcon('brand')}
                 </Button>
               </TableHead>

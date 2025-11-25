@@ -127,7 +127,7 @@ const AssetsList = () => {
 
   const handleExport = () => {
     // Convert to CSV
-    const headers = ["Asset ID", "Brand", "Model", "Description", "Serial No", "Category", "Status", "Assigned To"];
+    const headers = ["Asset ID", "Make", "Model", "Description", "Serial No", "Category", "Status", "Assigned To"];
     const csvData = filteredAssets.map((asset) => [
       asset.asset_id || "",
       asset.brand || "",
@@ -287,7 +287,7 @@ const AssetsList = () => {
                   />
                 </TableHead>
                 <TableHead>ASSET ID</TableHead>
-                <TableHead>BRAND</TableHead>
+                <TableHead>MAKE</TableHead>
                 <TableHead>MODEL</TableHead>
                 <TableHead>DESCRIPTION</TableHead>
                 <TableHead>SERIAL NO</TableHead>

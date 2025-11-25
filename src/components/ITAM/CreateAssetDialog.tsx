@@ -14,7 +14,7 @@ import { Loader2, ImagePlus } from "lucide-react";
 import { ImagePickerDialog } from "./ImagePickerDialog";
 const assetSchema = z.object({
   asset_id: z.string().min(1, "Asset ID is required"),
-  brand: z.string().min(1, "Brand is required"),
+  brand: z.string().min(1, "Make is required"),
   model: z.string().min(1, "Model is required"),
   description: z.string().optional(),
   asset_configuration: z.string().optional(),

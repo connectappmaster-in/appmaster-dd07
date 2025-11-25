@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 import { ImagePickerDialog } from "./ImagePickerDialog";
 const assetSchema = z.object({
   asset_id: z.string().min(1, "Asset ID is required"),
-  brand: z.string().min(1, "Brand is required"),
+  brand: z.string().min(1, "Make is required"),
   model: z.string().min(1, "Model is required"),
   description: z.string().optional(),
   asset_configuration: z.string().optional(),
@@ -196,7 +196,7 @@ export const EditAssetDialog = ({
                 <FormField control={form.control} name="brand" render={({
                 field
               }) => <FormItem>
-                      <FormLabel>Brand *</FormLabel>
+                      <FormLabel>Make *</FormLabel>
                       <FormControl>
                         <Input placeholder="e.g., Dell, HP, Lenovo" {...field} />
                       </FormControl>

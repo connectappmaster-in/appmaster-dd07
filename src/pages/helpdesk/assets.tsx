@@ -326,7 +326,163 @@ export default function HelpdeskAssets() {
 
           {/* Tools Tab */}
           <TabsContent value="tools" className="space-y-2 mt-2">
-            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 p-4">
+              {/* Import / Export */}
+              <Button 
+                variant="outline" 
+                className="h-auto py-6 flex-col gap-2"
+                onClick={() => navigate('/helpdesk/assets/explore/tools')}
+              >
+                <Package className="h-6 w-6 text-primary" />
+                <div className="text-center">
+                  <div className="font-semibold">Import / Export</div>
+                  <div className="text-xs text-muted-foreground">Bulk import/export assets</div>
+                </div>
+              </Button>
+
+              {/* Photo Gallery */}
+              <Button 
+                variant="outline" 
+                className="h-auto py-6 flex-col gap-2"
+                onClick={() => navigate('/helpdesk/assets/explore/tools')}
+              >
+                <FileText className="h-6 w-6 text-primary" />
+                <div className="text-center">
+                  <div className="font-semibold">Photo Gallery</div>
+                  <div className="text-xs text-muted-foreground">Browse asset photos</div>
+                </div>
+              </Button>
+
+              {/* Audit Trail */}
+              <Button 
+                variant="outline" 
+                className="h-auto py-6 flex-col gap-2"
+                onClick={() => navigate('/helpdesk/assets/explore/tools')}
+              >
+                <Settings className="h-6 w-6 text-primary" />
+                <div className="text-center">
+                  <div className="font-semibold">Audit Trail</div>
+                  <div className="text-xs text-muted-foreground">Asset history logs</div>
+                </div>
+              </Button>
+
+              {/* QR Codes */}
+              <Button 
+                variant="outline" 
+                className="h-auto py-6 flex-col gap-2"
+                onClick={() => navigate('/helpdesk/assets/explore/tools')}
+              >
+                <Package className="h-6 w-6 text-primary" />
+                <div className="text-center">
+                  <div className="font-semibold">QR Codes</div>
+                  <div className="text-xs text-muted-foreground">Generate asset QR codes</div>
+                </div>
+              </Button>
+
+              {/* Barcode Scanner */}
+              <Button 
+                variant="outline" 
+                className="h-auto py-6 flex-col gap-2"
+                onClick={() => navigate('/helpdesk/assets/explore/tools')}
+              >
+                <Search className="h-6 w-6 text-primary" />
+                <div className="text-center">
+                  <div className="font-semibold">Barcode Scanner</div>
+                  <div className="text-xs text-muted-foreground">Quick asset lookup</div>
+                </div>
+              </Button>
+
+              {/* Reports */}
+              <Button 
+                variant="outline" 
+                className="h-auto py-6 flex-col gap-2"
+                onClick={() => navigate('/helpdesk/assets/reports')}
+              >
+                <FileText className="h-6 w-6 text-primary" />
+                <div className="text-center">
+                  <div className="font-semibold">Asset Reports</div>
+                  <div className="text-xs text-muted-foreground">Comprehensive reports</div>
+                </div>
+              </Button>
+
+              {/* Depreciation */}
+              <Button 
+                variant="outline" 
+                className="h-auto py-6 flex-col gap-2"
+                onClick={() => navigate('/helpdesk/assets/depreciation')}
+              >
+                <Package className="h-6 w-6 text-primary" />
+                <div className="text-center">
+                  <div className="font-semibold">Depreciation</div>
+                  <div className="text-xs text-muted-foreground">Track asset lifecycle</div>
+                </div>
+              </Button>
+
+              {/* Purchase Orders */}
+              <Button 
+                variant="outline" 
+                className="h-auto py-6 flex-col gap-2"
+                onClick={() => navigate('/helpdesk/assets/purchase-orders')}
+              >
+                <Package className="h-6 w-6 text-primary" />
+                <div className="text-center">
+                  <div className="font-semibold">Purchase Orders</div>
+                  <div className="text-xs text-muted-foreground">Manage procurement</div>
+                </div>
+              </Button>
+
+              {/* Vendors */}
+              <Button 
+                variant="outline" 
+                className="h-auto py-6 flex-col gap-2"
+                onClick={() => navigate('/helpdesk/assets/vendors')}
+              >
+                <UserCheck className="h-6 w-6 text-primary" />
+                <div className="text-center">
+                  <div className="font-semibold">Vendors</div>
+                  <div className="text-xs text-muted-foreground">Manage asset vendors</div>
+                </div>
+              </Button>
+
+              {/* Licenses */}
+              <Button 
+                variant="outline" 
+                className="h-auto py-6 flex-col gap-2"
+                onClick={() => navigate('/helpdesk/assets/licenses')}
+              >
+                <FileText className="h-6 w-6 text-primary" />
+                <div className="text-center">
+                  <div className="font-semibold">Licenses</div>
+                  <div className="text-xs text-muted-foreground">Software license tracking</div>
+                </div>
+              </Button>
+
+              {/* Repairs */}
+              <Button 
+                variant="outline" 
+                className="h-auto py-6 flex-col gap-2"
+                onClick={() => navigate('/helpdesk/assets/repairs')}
+              >
+                <Wrench className="h-6 w-6 text-primary" />
+                <div className="text-center">
+                  <div className="font-semibold">Repairs</div>
+                  <div className="text-xs text-muted-foreground">Track asset repairs</div>
+                </div>
+              </Button>
+
+              {/* View All Tools */}
+              <Button 
+                variant="default" 
+                className="h-auto py-6 flex-col gap-2"
+                onClick={() => navigate('/helpdesk/assets/explore/tools')}
+              >
+                <Settings className="h-6 w-6" />
+                <div className="text-center">
+                  <div className="font-semibold">All Tools</div>
+                  <div className="text-xs">View complete toolset</div>
+                </div>
+              </Button>
+            </div>
           </TabsContent>
 
           {/* Reports Tab */}

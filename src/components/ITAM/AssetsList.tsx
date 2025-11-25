@@ -436,12 +436,14 @@ export const AssetsList = ({ status, filters = {}, onSelectionChange }: AssetsLi
                       }}>
                         Edit
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={(e) => {
-                        e.stopPropagation();
-                        setAssignAsset(asset);
-                      }}>
-                        Check In
-                      </DropdownMenuItem>
+                      {asset.status === 'assigned' && (
+                        <DropdownMenuItem onClick={(e) => {
+                          e.stopPropagation();
+                          setAssignAsset(asset);
+                        }}>
+                          Check In
+                        </DropdownMenuItem>
+                      )}
                       <DropdownMenuItem onClick={async (e) => {
                         e.stopPropagation();
                         try {

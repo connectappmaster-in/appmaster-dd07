@@ -105,7 +105,7 @@ export default function HelpdeskAssets() {
                 <Wrench className="h-3.5 w-3.5" />
                 Tools
               </TabsTrigger>
-              <TabsTrigger value="reports" className="gap-1.5 px-3 text-sm h-7">
+              <TabsTrigger value="reports" className="gap-1.5 px-3 text-sm h-7" onClick={() => navigate('/helpdesk/assets/reports')}>
                 <FileText className="h-3.5 w-3.5" />
                 Reports
               </TabsTrigger>

@@ -1,71 +1,108 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { toast } from "sonner";
+import { Card } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
+import { BackButton } from "@/components/BackButton";
+import logo from "@/assets/appmaster-logo.png";
 
-export default function PasswordReset() {
+const PasswordReset = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const [sent, setSent] = useState(false);
+  const { toast } = useToast();
 
-  const handleReset = async (e: React.FormEvent) => {
+  const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password-confirm`,
+      const { data, error } = await supabase.functions.invoke('forgot-password', {
+        body: { email }
       });
 
-      if (error) throw error;
+      if (error) {
+        throw new Error("System error occurred. Please try again later.");
+      }
 
-      toast.success("Password reset email sent! Check your inbox.");
-      setTimeout(() => navigate("/login"), 2000);
+      setSent(true);
+      toast({
+        title: "Success",
+        description: data.message || "If an account with this email exists, we've sent a password reset link.",
+      });
     } catch (error: any) {
-      toast.error(error.message || "Failed to send reset email");
+      toast({
+        title: "Error",
+        description: error.message || "System error occurred. Please try again later.",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Reset Password</CardTitle>
-          <CardDescription>Enter your email to receive a reset link</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleReset} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                placeholder="your@email.com"
-              />
+    <>
+      <BackButton />
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-accent/10 to-background p-4">
+        <Card className="w-full max-w-md p-6">
+          <div className="text-center mb-6">
+            <div className="flex items-center justify-center mb-3">
+              <img src={logo} alt="AppMaster" className="h-14 w-auto" />
             </div>
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Sending..." : "Send Reset Link"}
-            </Button>
-            <Button
-              type="button"
-              variant="ghost"
-              className="w-full"
-              onClick={() => navigate("/login")}
-            >
-              Back to Login
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
-    </div>
+            <h1 className="text-2xl font-bold mb-2">Reset Password</h1>
+            <p className="text-sm text-muted-foreground">
+              Enter your email to receive a password reset link
+            </p>
+          </div>
+
+          {sent ? (
+            <div className="space-y-4">
+              <div className="p-4 bg-accent/20 rounded-md text-center">
+                <p className="text-sm">
+                  Check your email for a password reset link.
+                  <br />
+                  If you don't see it, check your spam folder.
+                </p>
+              </div>
+              <Link to="/login">
+                <Button variant="outline" className="w-full">
+                  Back to Login
+                </Button>
+              </Link>
+            </div>
+          ) : (
+            <form onSubmit={handleResetPassword} className="space-y-4">
+              <div>
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  placeholder="you@company.com"
+                />
+              </div>
+
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? "Sending..." : "Send Reset Link"}
+              </Button>
+
+              <div className="text-center">
+                <Link to="/login" className="text-sm text-muted-foreground hover:text-foreground">
+                  Back to Login
+                </Link>
+              </div>
+            </form>
+          )}
+        </Card>
+      </div>
+    </>
   );
-}
+};
+
+export default PasswordReset;

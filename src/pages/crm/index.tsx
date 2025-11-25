@@ -1,9 +1,13 @@
+import { BackButton } from "@/components/BackButton";
+
 const CRM = () => {
   return (
-    <div className="min-h-screen p-8">
-      <h1 className="text-3xl font-bold mb-6">CRM Dashboard</h1>
-      <p className="text-muted-foreground">Coming soon...</p>
-    </div>
+    <>
+      <BackButton />
+      <div className="p-4">
+        <h1 className="text-2xl font-bold">CRM Module - Coming Soon</h1>
+      </div>
+    </>
   );
 };
 

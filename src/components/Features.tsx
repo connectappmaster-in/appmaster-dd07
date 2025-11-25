@@ -1,127 +1,42 @@
-import { BarChart3, ShoppingCart, Users, Briefcase, Package, Calendar, TrendingDown, FileText, Clock, UserPlus, Ticket, CreditCard, Laptop, Store, Box, PhoneCall, Target, CheckCircle } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
-const features = [{
-  icon: Users,
-  title: "Finance",
-  tools: [{
-    name: "Depreciation",
-    path: "/depreciation",
-    icon: TrendingDown
-  }, {
-    name: "Invoicing",
-    path: "/invoicing",
-    icon: FileText
-  }]
-}, {
-  icon: ShoppingCart,
-  title: "HR",
-  tools: [{
-    name: "Attendance",
-    path: "/attendance",
-    icon: Clock
-  }, {
-    name: "Recruitment",
-    path: "/recruitment",
-    icon: UserPlus
-  }]
-}, {
-  icon: BarChart3,
-  title: "IT",
-  tools: [{
-    name: "Tickets Handling",
-    path: "/tickets",
-    icon: Ticket
-  }, {
-    name: "Subscriptions",
-    path: "/subscriptions",
-    icon: CreditCard
-  }, {
-    name: "Assets",
-    path: "/assets",
-    icon: Laptop
-  }]
-}, {
-  icon: Briefcase,
-  title: "Shop",
-  tools: [{
-    name: "Income & Expenditure Tracker",
-    path: "/shop-income-expense",
-    icon: Store
-  }]
-}, {
-  icon: Package,
-  title: "Manufacturing",
-  tools: [{
-    name: "Inventory",
-    path: "/inventory",
-    icon: Box
-  }]
-}, {
-  icon: Calendar,
-  title: "Sales",
-  tools: [{
-    name: "CRM",
-    path: "/crm",
-    icon: Target
-  }]
-}, {
-  icon: Package,
-  title: "Marketing",
-  tools: [{
-    name: "Marketing",
-    path: "/marketing",
-    icon: CheckCircle
-  }]
-}, {
-  icon: Package,
-  title: "Productivity",
-  tools: [{
-    name: "Personal Expense Tracker",
-    path: "/personal-expense",
-    icon: CheckCircle
-  }]
-}, {
-  icon: Package,
-  title: "Custom",
-  tools: [{
-    name: "Contact Us",
-    path: "/contact",
-    icon: PhoneCall
-  }]
-}];
+import { BarChart3, FileText, Users, Ticket } from "lucide-react";
 const Features = () => {
-  return <section className="pb-16 bg-muted/30">
-      <div className="w-full">
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-[1400px] mx-auto px-4">
-          {features.map((feature, index) => {
-          const Icon = feature.icon;
-          return <div key={index} className="bg-card rounded-xl border border-border hover:shadow-lg hover:border-primary/50 hover:-translate-y-1 transition-all duration-300 overflow-hidden flex h-[180px] animate-fade-in" style={{ animationDelay: `${index * 0.1}s`, animationFillMode: 'both' }}>
-                {/* Left side - Vertical colored stripe with category name */}
-                <div className="w-12 bg-primary flex flex-col items-center justify-center py-4 gap-2">
-                  
-                  <div className="flex flex-col items-center justify-center flex-1">
-                    <span className="text-primary-foreground font-semibold whitespace-nowrap transform -rotate-90 origin-center text-lg">
-                      {feature.title}
-                    </span>
-                  </div>
-                </div>
-                
-                {/* Right side - Tools */}
-                <div className="flex-1 p-4 flex flex-col justify-center space-y-1.5">
-                  {feature.tools.map((tool, toolIndex) => {
-                const ToolIcon = tool.icon;
-                return <Link key={toolIndex} to={tool.path} className="flex items-center gap-2 p-1.5 rounded-lg hover:bg-muted transition-colors group/tool">
-                        <ToolIcon className="h-4 w-4 text-foreground group-hover/tool:text-primary transition-colors flex-shrink-0" />
-                        <span className="text-foreground group-hover/tool:text-primary transition-colors font-medium text-lg">
-                          {tool.name}
-                        </span>
-                      </Link>;
-              })}
-                </div>
-              </div>;
-        })}
-        </div>
+  const products = [{
+    icon: BarChart3,
+    title: "CRM",
+    description: "Track leads, manage contacts, and close deals faster with our comprehensive CRM system",
+    color: "from-blue-500 to-blue-600",
+    path: "/apps/crm"
+  }, {
+    icon: FileText,
+    title: "Invoicing & Billing",
+    description: "Generate professional invoices and manage your billing cycles effortlessly",
+    color: "from-purple-500 to-purple-600",
+    path: "/apps/invoicing"
+  }, {
+    icon: Users,
+    title: "HR & Attendance",
+    description: "Streamline employee management, track attendance, and handle HR operations",
+    color: "from-pink-500 to-pink-600",
+    path: "/apps/attendance"
+  }, {
+    icon: Ticket,
+    title: "Help Desk",
+    description: "Provide excellent customer support with organized ticket management",
+    color: "from-cyan-500 to-cyan-600",
+    path: "/apps/helpdesk"
+  }];
+  return <section className="py-24 px-4 bg-background relative overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-1/4 left-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl animate-pulse" style={{
+        animationDelay: "1.5s"
+      }} />
       </div>
+
+      
     </section>;
 };
 export default Features;

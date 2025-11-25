@@ -1,76 +1,87 @@
-import { useState } from 'react';
-import { RoleGuard } from '@/components/auth/RoleGuard';
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
-import { SuperAdminSidebar } from '@/components/super-admin/SuperAdminSidebar';
-import { SuperAdminDashboard } from '@/components/super-admin/SuperAdminDashboard';
-import { OrganisationsView } from '@/components/super-admin/OrganisationsView';
-import { GlobalUsersView } from '@/components/super-admin/GlobalUsersView';
-import { SubscriptionPlansView } from '@/components/super-admin/SubscriptionPlansView';
-import { FeatureFlagsView } from '@/components/super-admin/FeatureFlagsView';
-import { WorkerJobsView } from '@/components/super-admin/WorkerJobsView';
-import { SystemLogsView } from '@/components/super-admin/SystemLogsView';
-import { BillingHistoryView } from '@/components/super-admin/BillingHistoryView';
-import { APIKeysView } from '@/components/super-admin/APIKeysView';
-import { WebhooksView } from '@/components/super-admin/WebhooksView';
-import { UsageMetricsView } from '@/components/super-admin/UsageMetricsView';
-import { SystemSettingsView } from '@/components/super-admin/SystemSettingsView';
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { SuperAdminSidebar } from "@/components/SuperAdmin/SuperAdminSidebar";
+import { BackButton } from "@/components/BackButton";
+import { User } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/contexts/AuthContext";
+import { NotificationPanel } from "@/components/NotificationPanel";
 
-const SuperAdmin = () => {
-  const [activeView, setActiveView] = useState('dashboard');
-
-  const renderView = () => {
-    switch (activeView) {
-      case 'dashboard':
-        return <SuperAdminDashboard />;
-      case 'organisations':
-        return <OrganisationsView />;
-      case 'users':
-        return <GlobalUsersView />;
-      case 'plans':
-        return <SubscriptionPlansView />;
-      case 'billing':
-        return <BillingHistoryView />;
-      case 'feature-flags':
-        return <FeatureFlagsView />;
-      case 'worker-jobs':
-        return <WorkerJobsView />;
-      case 'logs':
-        return <SystemLogsView />;
-      case 'api-keys':
-        return <APIKeysView />;
-      case 'webhooks':
-        return <WebhooksView />;
-      case 'usage':
-        return <UsageMetricsView />;
-      case 'settings':
-        return <SystemSettingsView />;
-      default:
-        return <SuperAdminDashboard />;
-    }
-  };
-
-  return (
-    <RoleGuard allowedRoles={[]} requireSuperAdmin={true}>
-      <SidebarProvider>
-        <div className="flex min-h-screen w-full bg-background">
-          <SuperAdminSidebar activeView={activeView} onViewChange={setActiveView} />
-          
-          <div className="flex-1">
-            <header className="h-14 flex items-center border-b px-4 bg-card/50 backdrop-blur-sm sticky top-0 z-40">
-              <SidebarTrigger />
-              <h1 className="ml-4 text-lg font-semibold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-                AppMaster Super Admin Suite
-              </h1>
-            </header>
-
-            <main className="p-6">
-              {renderView()}
-            </main>
-          </div>
-        </div>
-      </SidebarProvider>
-    </RoleGuard>
-  );
+const routeTitles: Record<string, string> = {
+  "/super-admin": "Dashboard",
+  "/super-admin/users": "Individual Users",
+  "/super-admin/organisations": "Organizations",
+  "/super-admin/organization-users": "Organization Users",
+  "/super-admin/admins": "Appmaster Admins",
+  "/super-admin/api-keys": "API Keys Management",
+  "/super-admin/broadcasts": "Broadcast Messages",
+  "/super-admin/contact-submissions": "Contact Submissions",
+  "/super-admin/features": "Feature Flags",
+  "/super-admin/jobs": "Worker Jobs Monitor",
+  "/super-admin/logs": "System Logs",
+  "/super-admin/plans": "Subscription Plans",
+  "/super-admin/tools": "Tools Management",
+  "/super-admin/settings": "System Settings",
+  "/super-admin/usage": "Usage Metrics",
 };
 
+const SuperAdmin = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const pageTitle = routeTitles[location.pathname] || "Super Admin";
+  const { user, signOut } = useAuth();
+
+  return <div className="h-screen flex w-full overflow-hidden mt-0">
+      <BackButton />
+      <SuperAdminSidebar />
+      
+      <main className="flex-1 h-screen flex flex-col bg-background">
+        <div className="border-b px-4 flex items-center justify-between shrink-0 mt-0" style={{
+        height: "52px"
+      }}>
+          <h1 className="text-lg font-semibold">{pageTitle}</h1>
+          
+          <div className="flex items-center gap-2">
+            <NotificationPanel />
+
+            {/* Profile Icon */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <User className="h-5 w-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>
+                  <div className="flex flex-col">
+                    <span className="font-medium">S Admin</span>
+                    <span className="text-xs text-muted-foreground">Super Admin</span>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => navigate('/profile')}>
+                  Profile
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={signOut}>
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </div>
+
+        <div className="flex-1 overflow-y-auto px-4 py-3">
+          <Outlet />
+        </div>
+      </main>
+    </div>;
+};
 export default SuperAdmin;

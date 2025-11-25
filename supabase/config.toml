@@ -23,3 +23,6 @@ verify_jwt = true
 
 [functions.initialize-super-admin]
 verify_jwt = false
+
+[functions.forgot-password]
+verify_jwt = false

@@ -1,409 +1,378 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate, useLocation } from "react-router-dom";
+import { format } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { useOrganisation } from "@/contexts/OrganisationContext";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, ArrowLeft, User as UserIcon, Bell, Globe, Palette, Upload, Package } from "lucide-react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import type { User } from "@supabase/supabase-js";
-
-interface Preferences {
-  email_notifications: boolean;
-  push_notifications: boolean;
-  marketing_emails: boolean;
-  language: string;
-  timezone: string;
-  theme: string;
-}
-
+import { ProfileSidebar } from "@/components/Profile/ProfileSidebar";
+import { ProfileCard } from "@/components/Profile/ProfileCard";
+import Navbar from "@/components/Navbar";
+import { Loader2, Mail, Shield, Lock, Key, Smartphone, Activity, Eye, Settings, AlertCircle, CheckCircle2 } from "lucide-react";
+import PersonalInfo from "./profile/PersonalInfo";
+import Security from "./profile/Security";
+import Payments from "./profile/Payments";
 const Profile = () => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [uploading, setUploading] = useState(false);
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState("");
-  const [preferences, setPreferences] = useState<Preferences>({
-    email_notifications: true,
-    push_notifications: true,
-    marketing_emails: false,
-    language: "en",
-    timezone: "UTC",
-    theme: "system",
-  });
-  const [subscriptions, setSubscriptions] = useState<any[]>([]);
+  const {
+    user,
+    userType
+  } = useAuth();
+  const {
+    organisation
+  } = useOrganisation();
+  const {
+    toast
+  } = useToast();
   const navigate = useNavigate();
-  const { toast } = useToast();
+  const location = useLocation();
+  const queryClient = useQueryClient();
+  const isAppmasterAdmin = userType === "appmaster_admin";
+  const [isEditing, setIsEditing] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: ""
+  });
 
+  // Intersection Observer for tracking active section
   useEffect(() => {
-    loadProfile();
+    const observerOptions = {
+      root: document.querySelector('main'),
+      rootMargin: "-10% 0px -50% 0px",
+      threshold: [0, 0.25, 0.5, 0.75, 1]
+    };
+
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      // Find the section with the highest intersection ratio
+      const visibleSections = entries
+        .filter(entry => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+      
+      if (visibleSections.length > 0) {
+        setActiveSection(visibleSections[0].target.id);
+      }
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+    
+    const sections = ["home", "personal-info", "security", "payments"];
+    sections.forEach((id) => {
+      const element = document.getElementById(id);
+      if (element) observer.observe(element);
+    });
+
+    return () => observer.disconnect();
   }, []);
 
-  const loadProfile = async () => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      if (!user) {
-        navigate("/login");
-        return;
+  // Handle hash navigation on load
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace("#", "");
+      const element = document.getElementById(id);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 100);
       }
-
-      setUser(user);
-      setEmail(user.email || "");
-
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("first_name, last_name, avatar_url")
-        .eq("id", user.id)
-        .single();
-
-      if (profile) {
-        setFullName(`${profile.first_name || ''} ${profile.last_name || ''}`.trim());
-        setAvatarUrl(profile.avatar_url || "");
-      }
-
-      const { data: subs } = await supabase
-        .from("subscriptions")
-        .select("*")
-        .eq("organisation_id", user.id);
-
-      if (subs) {
-        setSubscriptions(subs);
-      }
-    } catch (error) {
-      console.error("Error loading profile:", error);
-      toast({
-        title: "Error",
-        description: "Failed to load profile",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
     }
-  };
-
-  const handleSaveProfile = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!user) return;
-
-    setSaving(true);
-    try {
-      const { error } = await supabase
-        .from("profiles")
-        .update({ full_name: fullName, avatar_url: avatarUrl })
-        .eq("id", user.id);
-
+  }, [location.hash]);
+  const {
+    data: userData,
+    isLoading,
+    isFetching
+  } = useQuery({
+    queryKey: ["user-profile", user?.id],
+    queryFn: async () => {
+      const {
+        data,
+        error
+      } = await supabase.from("users").select("*").eq("auth_user_id", user?.id).maybeSingle();
       if (error) throw error;
+      return data;
+    },
+    enabled: !!user?.id
+  });
+  const {
+    data: profile
+  } = useQuery({
+    queryKey: ["profile", user?.id],
+    queryFn: async () => {
+      const {
+        data,
+        error
+      } = await supabase.from("profiles").select("*").eq("id", user?.id).maybeSingle();
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!user?.id
+  });
 
-      toast({
-        title: "Success",
-        description: "Profile updated successfully",
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to update profile",
-        variant: "destructive",
-      });
-    } finally {
-      setSaving(false);
+  // Keep local form state in sync with latest server data
+  useEffect(() => {
+    if (!isEditing) {
+      if (userData) {
+        setFormData({
+          name: userData.name || "",
+          email: userData.email || "",
+          phone: userData.phone || ""
+        });
+      } else if (user) {
+        setFormData({
+          name: (user.user_metadata as any)?.name || user.email || "",
+          email: user.email || "",
+          phone: (user.user_metadata as any)?.phone || ""
+        });
+      }
     }
-  };
+  }, [userData, isEditing, user]);
+  const updateProfileMutation = useMutation({
+    mutationFn: async (data: {
+      name: string;
+      phone: string;
+    }) => {
+      // Special handling for Appmaster admins: store profile info in auth metadata
+      if (isAppmasterAdmin) {
+        const {
+          data: authResult,
+          error: authError
+        } = await supabase.auth.updateUser({
+          data: {
+            name: data.name,
+            phone: data.phone
+          }
+        });
+        if (authError) throw authError;
 
-  const handleAvatarUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    try {
-      if (!event.target.files || event.target.files.length === 0 || !user) return;
+        // Best-effort sync phone to saas_users (ignore errors)
+        if (user?.id) {
+          await supabase.from("saas_users").update({
+            phone: data.phone
+          }).eq("auth_user_id", user.id);
+        }
+        const updatedUser = authResult?.user ?? user;
+        return {
+          name: (updatedUser?.user_metadata as any)?.name as string || updatedUser?.email || data.name,
+          phone: (updatedUser?.user_metadata as any)?.phone as string || data.phone,
+          email: updatedUser?.email || ""
+        };
+      }
 
-      setUploading(true);
-      const file = event.target.files[0];
-      const fileExt = file.name.split(".").pop();
-      const filePath = `${user.id}/${Math.random()}.${fileExt}`;
+      // For regular users, update the users table
+      const {
+        data: updated,
+        error: updateError
+      } = await supabase.from("users").update({
+        name: data.name,
+        phone: data.phone
+      }).eq("auth_user_id", user?.id).select("id, name, phone, email").maybeSingle();
+      if (updateError) throw updateError;
 
-      const { error: uploadError } = await supabase.storage
-        .from("avatars")
-        .upload(filePath, file, { upsert: true });
+      // If no existing row, create one using organisation context if available
+      if (!updated) {
+        const orgId = organisation?.id;
 
-      if (uploadError) throw uploadError;
-
-      const { data: { publicUrl } } = supabase.storage
-        .from("avatars")
-        .getPublicUrl(filePath);
-
-      setAvatarUrl(publicUrl);
-
-      await supabase
-        .from("profiles")
-        .update({ avatar_url: publicUrl })
-        .eq("id", user.id);
-
-      toast({
-        title: "Success",
-        description: "Avatar uploaded successfully",
+        // If no organisation (e.g. AppMaster admins), fall back to auth profile only
+        if (!orgId) {
+          const {
+            data: authResult,
+            error: authError
+          } = await supabase.auth.updateUser({
+            data: {
+              name: data.name,
+              phone: data.phone
+            }
+          });
+          if (authError) throw authError;
+          if (user?.id) {
+            await supabase.from("saas_users").update({
+              phone: data.phone
+            }).eq("auth_user_id", user.id);
+          }
+          const updatedUser = authResult?.user ?? user;
+          return {
+            name: (updatedUser?.user_metadata as any)?.name as string || updatedUser?.email || data.name,
+            phone: (updatedUser?.user_metadata as any)?.phone as string || data.phone,
+            email: updatedUser?.email || ""
+          };
+        }
+        const {
+          data: inserted,
+          error: insertError
+        } = await supabase.from("users").insert({
+          auth_user_id: user?.id,
+          email: user?.email || data.name,
+          // fallback
+          name: data.name,
+          phone: data.phone,
+          organisation_id: orgId,
+          status: "active",
+          role: "member"
+        }).select("id, name, phone, email").single();
+        if (insertError) throw insertError;
+        return inserted;
+      }
+      return updated;
+    },
+    onSuccess: async result => {
+      // Optimistically sync cache so UI updates instantly
+      queryClient.setQueryData(["user-profile", user?.id], (prev: any) => ({
+        ...(prev || {}),
+        name: result.name,
+        phone: result.phone,
+        email: result.email
+      }));
+      await queryClient.invalidateQueries({
+        queryKey: ["user-profile", user?.id]
       });
-    } catch (error) {
       toast({
-        title: "Error",
-        description: "Failed to upload avatar",
-        variant: "destructive",
+        title: "Profile updated",
+        description: "Your changes have been saved."
       });
-    } finally {
-      setUploading(false);
+      setIsEditing(false);
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Update failed",
+        description: error.message || "Failed to update profile",
+        variant: "destructive"
+      });
     }
+  });
+  const handleEdit = () => {
+    setIsEditing(true);
   };
-
-  const handleSavePreferences = async () => {
-    if (!user) return;
-
-    setSaving(true);
-    try {
-      // Save preferences locally for now (user_preferences table doesn't exist yet)
-      localStorage.setItem(`preferences_${user.id}`, JSON.stringify(preferences));
-
+  const handleSave = () => {
+    if (!formData.name.trim()) {
       toast({
-        title: "Success",
-        description: "Settings saved successfully",
+        title: "Name required",
+        description: "Please enter your full name before saving.",
+        variant: "destructive"
       });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to save settings",
-        variant: "destructive",
-      });
-    } finally {
-      setSaving(false);
+      return;
     }
+    updateProfileMutation.mutate({
+      name: formData.name,
+      phone: formData.phone
+    });
   };
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
+  const handleCancel = () => {
+    // Reset to latest server data
+    if (userData) {
+      setFormData({
+        name: userData.name || "",
+        email: userData.email || "",
+        phone: userData.phone || ""
+      });
+    }
+    setIsEditing(false);
+  };
+  const getInitials = (name?: string) => {
+    if (!name) return "U";
+    return name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
+  };
+  if (isLoading) {
+    return <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>;
   }
+  return <div className="min-h-screen bg-background">
+      <Navbar />
+      <div className="flex h-screen pt-14">
+        {/* Sidebar - Fixed */}
+        <ProfileSidebar activeSection={activeSection} />
 
-  const getInitials = (name: string, email: string) => {
-    if (name) return name.substring(0, 2).toUpperCase();
-    return email.substring(0, 2).toUpperCase();
-  };
-
-  const getStatusBadge = (subscription: any) => {
-    const status = subscription.status;
-    const trialDaysLeft = subscription.trial_days_remaining;
-    
-    if (status === "trial" && trialDaysLeft > 0) {
-      return `Trial (${trialDaysLeft} days left)`;
-    }
-    return status.charAt(0).toUpperCase() + status.slice(1);
-  };
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="container max-w-4xl mx-auto py-6 px-4">
-        <Button variant="ghost" onClick={() => navigate("/")} className="mb-4">
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to Dashboard
-        </Button>
-
-        <div className="space-y-4">
-          <div>
-            <h1 className="text-2xl font-bold text-foreground">Settings</h1>
-            <p className="text-sm text-muted-foreground">
-              Manage your profile, preferences, and subscriptions
-            </p>
-          </div>
-
-          <ScrollArea className="h-[calc(100vh-200px)]">
-            <div className="space-y-4 pr-4">
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <UserIcon className="h-4 w-4" />
-                    Profile Information
-                  </CardTitle>
-                  <CardDescription className="text-xs">
-                    Manage your personal information and avatar
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex items-center gap-4">
-                    <Avatar className="h-16 w-16">
-                      <AvatarImage src={avatarUrl} alt={fullName} />
-                      <AvatarFallback className="bg-primary text-primary-foreground">
-                        {getInitials(fullName, email)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="flex-1">
-                      <Label htmlFor="avatar-upload" className="cursor-pointer">
-                        <Button type="button" variant="outline" size="sm" disabled={uploading} asChild>
-                          <span>
-                            {uploading ? <Loader2 className="mr-2 h-3 w-3 animate-spin" /> : <Upload className="mr-2 h-3 w-3" />}
-                            Upload Avatar
-                          </span>
-                        </Button>
-                      </Label>
-                      <Input id="avatar-upload" type="file" accept="image/*" className="hidden" onChange={handleAvatarUpload} disabled={uploading} />
-                    </div>
-                  </div>
-
-                  <form onSubmit={handleSaveProfile} className="space-y-3">
-                    <div className="space-y-1.5">
-                      <Label htmlFor="fullName" className="text-xs">Full Name</Label>
-                      <Input id="fullName" value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="Enter your full name" className="h-9" />
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="email" className="text-xs">Email</Label>
-                      <Input id="email" type="email" value={email} disabled className="bg-muted h-9" />
-                      <p className="text-[10px] text-muted-foreground">Email cannot be changed</p>
-                    </div>
-                    <Button type="submit" disabled={saving} size="sm" className="w-full">
-                      {saving && <Loader2 className="mr-2 h-3 w-3 animate-spin" />}
-                      Save Profile
-                    </Button>
-                  </form>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <Globe className="h-4 w-4" />
-                    General Preferences
-                  </CardTitle>
-                  <CardDescription className="text-xs">Customize your experience</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="grid gap-3 md:grid-cols-2">
-                    <div className="space-y-1.5">
-                      <Label htmlFor="language" className="text-xs">Language</Label>
-                      <Select value={preferences.language} onValueChange={(value) => setPreferences({ ...preferences, language: value })}>
-                        <SelectTrigger id="language" className="h-9"><SelectValue /></SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="en">English</SelectItem>
-                          <SelectItem value="es">Spanish</SelectItem>
-                          <SelectItem value="fr">French</SelectItem>
-                          <SelectItem value="de">German</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="timezone" className="text-xs">Timezone</Label>
-                      <Select value={preferences.timezone} onValueChange={(value) => setPreferences({ ...preferences, timezone: value })}>
-                        <SelectTrigger id="timezone" className="h-9"><SelectValue /></SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="UTC">UTC</SelectItem>
-                          <SelectItem value="America/New_York">Eastern Time</SelectItem>
-                          <SelectItem value="America/Chicago">Central Time</SelectItem>
-                          <SelectItem value="America/Denver">Mountain Time</SelectItem>
-                          <SelectItem value="America/Los_Angeles">Pacific Time</SelectItem>
-                          <SelectItem value="Europe/London">London</SelectItem>
-                          <SelectItem value="Europe/Paris">Paris</SelectItem>
-                          <SelectItem value="Asia/Tokyo">Tokyo</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label htmlFor="theme" className="text-xs flex items-center gap-1.5">
-                      <Palette className="h-3 w-3" />
-                      Theme
-                    </Label>
-                    <Select value={preferences.theme} onValueChange={(value) => setPreferences({ ...preferences, theme: value })}>
-                      <SelectTrigger id="theme" className="h-9"><SelectValue /></SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="light">Light</SelectItem>
-                        <SelectItem value="dark">Dark</SelectItem>
-                        <SelectItem value="system">System</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <Bell className="h-4 w-4" />
-                    Notification Settings
-                  </CardTitle>
-                  <CardDescription className="text-xs">Manage how you receive updates</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="space-y-0.5">
-                      <Label htmlFor="email-notifications" className="text-xs font-medium">Email Notifications</Label>
-                      <p className="text-[10px] text-muted-foreground">Receive notifications via email</p>
-                    </div>
-                    <Switch id="email-notifications" checked={preferences.email_notifications} onCheckedChange={(checked) => setPreferences({ ...preferences, email_notifications: checked })} />
-                  </div>
-                  <Separator className="my-2" />
-                  <div className="flex items-center justify-between">
-                    <div className="space-y-0.5">
-                      <Label htmlFor="push-notifications" className="text-xs font-medium">Push Notifications</Label>
-                      <p className="text-[10px] text-muted-foreground">Receive push notifications in your browser</p>
-                    </div>
-                    <Switch id="push-notifications" checked={preferences.push_notifications} onCheckedChange={(checked) => setPreferences({ ...preferences, push_notifications: checked })} />
-                  </div>
-                  <Separator className="my-2" />
-                  <div className="flex items-center justify-between">
-                    <div className="space-y-0.5">
-                      <Label htmlFor="marketing-emails" className="text-xs font-medium">Marketing Emails</Label>
-                      <p className="text-[10px] text-muted-foreground">Receive emails about new features and updates</p>
-                    </div>
-                    <Switch id="marketing-emails" checked={preferences.marketing_emails} onCheckedChange={(checked) => setPreferences({ ...preferences, marketing_emails: checked })} />
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <Package className="h-4 w-4" />
-                    Active Subscriptions
-                  </CardTitle>
-                  <CardDescription className="text-xs">View your active tool subscriptions</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {subscriptions.length === 0 ? (
-                    <p className="text-center text-xs text-muted-foreground py-6">No active subscriptions</p>
-                  ) : (
-                    <div className="space-y-2">
-                      {subscriptions.map((sub) => (
-                        <div key={sub.id} className="flex items-center justify-between p-3 border border-border rounded-lg hover:bg-accent/50 transition-colors">
-                          <div>
-                            <p className="text-sm font-medium">{/* @ts-ignore */}{sub.tools?.display_name || "Unknown Tool"}</p>
-                            <p className="text-xs text-muted-foreground">{/* @ts-ignore */}{sub.tools?.category || "General"}</p>
-                          </div>
-                          <div className="text-right">
-                            <p className="text-xs font-medium">{getStatusBadge(sub)}</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-
-              <div className="sticky bottom-0 bg-background/95 backdrop-blur pt-3 pb-1">
-                <Button onClick={handleSavePreferences} disabled={saving} className="w-full">
-                  {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  Save All Settings
-                </Button>
+      {/* Main Content with smooth scrolling */}
+      <main className="flex-1 overflow-y-auto scroll-smooth">
+        <div className="max-w-5xl mx-auto px-4 py-6 space-y-8">
+          {/* Home Section */}
+          <section id="home" className="py-4 space-y-4">
+            {/* Header Section */}
+            <div className="text-center space-y-3">
+              <Avatar className="h-20 w-20 mx-auto border-4 border-primary/20">
+                <AvatarImage src={profile?.avatar_url || ""} />
+                <AvatarFallback className="bg-gradient-to-br from-primary to-primary/60 text-primary-foreground text-3xl font-bold">
+                  {getInitials(userData?.name)}
+                </AvatarFallback>
+              </Avatar>
+              
+              <div>
+                <h1 className="text-2xl font-normal text-foreground">
+                  Welcome, {formData.name || "User"}
+                </h1>
               </div>
             </div>
-          </ScrollArea>
-        </div>
-      </div>
-    </div>
-  );
-};
 
+            {/* Cards Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Profile & Personalization Card */}
+              <ProfileCard title="Profile & personalization" description="See your profile data and manage your account information" icon={<div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center">
+                    <Settings className="h-8 w-8 text-white" />
+                  </div>} actionLabel="Manage your profile info" onAction={() => {
+                  const element = document.getElementById("personal-info");
+                  element?.scrollIntoView({ behavior: "smooth", block: "start" });
+                }} />
+
+              {/* Security Tips Card */}
+              <ProfileCard title="You have security recommendations" description="Security issues found in your Security Checkup" icon={<div className="w-16 h-16 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center">
+                    <CheckCircle2 className="h-8 w-8 text-white" />
+                  </div>} actionLabel="Review security tips" onAction={() => {
+                  const element = document.getElementById("security");
+                  element?.scrollIntoView({ behavior: "smooth", block: "start" });
+                }} />
+
+              {/* Account Information Card */}
+              <ProfileCard title="Account information" description="View and manage your account details and preferences" icon={<div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center">
+                    <AlertCircle className="h-8 w-8 text-white" />
+                  </div>}>
+                <div className="space-y-3 text-sm">
+                  <div className="flex justify-between py-2 border-b">
+                    <span className="text-muted-foreground">Email</span>
+                    <span className="font-medium">{formData.email || user?.email}</span>
+                  </div>
+                  <div className="flex justify-between py-2 border-b">
+                    <span className="text-muted-foreground">Role</span>
+                    <span className="font-medium capitalize">{userData?.role || "Member"}</span>
+                  </div>
+                  <div className="flex justify-between py-2 border-b">
+                    <span className="text-muted-foreground">Status</span>
+                    <span className="font-medium text-green-600">
+                      {userData?.status || "Active"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between py-2">
+                    <span className="text-muted-foreground">Member Since</span>
+                    <span className="font-medium">
+                      {userData?.created_at ? format(new Date(userData.created_at), "MMM dd, yyyy") : "-"}
+                    </span>
+                  </div>
+                </div>
+              </ProfileCard>
+            </div>
+          </section>
+
+          {/* Personal Info Section */}
+          <section id="personal-info" className="py-4">
+            <PersonalInfo />
+          </section>
+
+          {/* Security Section */}
+          <section id="security" className="py-4">
+            <Security />
+          </section>
+
+          {/* Payments Section */}
+          <section id="payments" className="py-4">
+            <Payments />
+          </section>
+        </div>
+      </main>
+      </div>
+    </div>;
+};
 export default Profile;

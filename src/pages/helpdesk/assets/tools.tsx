@@ -117,8 +117,7 @@ export default function ToolsPage() {
   const generateQRCode = () => {
     toast.info('QR Code generator - Navigate to asset details to generate individual QR codes');
   };
-  return (
-    <div className="min-h-screen bg-background">
+  return <div className="min-h-screen bg-background">
       <AssetTopBar />
       
       <div className="px-4 py-4 space-y-4">
@@ -289,58 +288,13 @@ export default function ToolsPage() {
           </Dialog>
 
           {/* QR Code Generator */}
-          <Card className="border hover:border-primary/50 transition-all hover:shadow-md cursor-pointer" onClick={generateQRCode}>
-            <CardHeader className="pb-2">
-              <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center mb-1.5">
-                <QrCode className="h-4 w-4 text-primary" />
-              </div>
-              <CardTitle className="text-sm font-semibold">QR Codes</CardTitle>
-              <CardDescription className="text-xs">
-                Generate asset QR codes
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button variant="outline" className="w-full h-7 text-xs">
-                Generate Codes
-              </Button>
-            </CardContent>
-          </Card>
+          
 
           {/* Barcode Scanner */}
-          <Card className="border hover:border-primary/50 transition-all hover:shadow-md cursor-pointer" onClick={() => toast.info('Barcode scanner coming soon')}>
-            <CardHeader className="pb-2">
-              <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center mb-1.5">
-                <Barcode className="h-4 w-4 text-primary" />
-              </div>
-              <CardTitle className="text-sm font-semibold">Barcode Scanner</CardTitle>
-              <CardDescription className="text-xs">
-                Quick asset lookup
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button variant="outline" className="w-full h-7 text-xs">
-                Launch Scanner
-              </Button>
-            </CardContent>
-          </Card>
+          
 
           {/* Asset Reports */}
-          <Card className="border hover:border-primary/50 transition-all hover:shadow-md cursor-pointer" onClick={() => navigate('/helpdesk/assets/reports')}>
-            <CardHeader className="pb-2">
-              <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center mb-1.5">
-                <FileText className="h-4 w-4 text-primary" />
-              </div>
-              <CardTitle className="text-sm font-semibold">Asset Reports</CardTitle>
-              <CardDescription className="text-xs">
-                Comprehensive reports
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button variant="outline" className="w-full h-7 text-xs">
-                View Reports
-              </Button>
-            </CardContent>
-          </Card>
+          
 
           {/* Depreciation */}
           <Card className="border hover:border-primary/50 transition-all hover:shadow-md cursor-pointer" onClick={() => navigate('/helpdesk/assets/depreciation')}>
@@ -361,22 +315,7 @@ export default function ToolsPage() {
           </Card>
 
           {/* Purchase Orders */}
-          <Card className="border hover:border-primary/50 transition-all hover:shadow-md cursor-pointer" onClick={() => navigate('/helpdesk/assets/purchase-orders')}>
-            <CardHeader className="pb-2">
-              <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center mb-1.5">
-                <Package className="h-4 w-4 text-primary" />
-              </div>
-              <CardTitle className="text-sm font-semibold">Purchase Orders</CardTitle>
-              <CardDescription className="text-xs">
-                Manage asset procurement
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button variant="outline" className="w-full h-7 text-xs">
-                View Orders
-              </Button>
-            </CardContent>
-          </Card>
+          
 
           {/* Vendor Management */}
           <Card className="border hover:border-primary/50 transition-all hover:shadow-md cursor-pointer" onClick={() => navigate('/helpdesk/assets/vendors')}>
@@ -433,6 +372,5 @@ export default function ToolsPage() {
           </Card>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 }

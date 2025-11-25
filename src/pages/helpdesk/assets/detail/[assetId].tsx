@@ -336,10 +336,7 @@ const AssetDetail = () => {
             <div className="flex gap-4">
               {/* Asset Photo - Reduced Width */}
               <div className="flex-shrink-0">
-                <div 
-                  className="w-48 h-full rounded-lg border bg-muted flex items-center justify-center overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
-                  onClick={() => asset.photo_url && setIsImageDialogOpen(true)}
-                >
+                <div className="w-48 h-full rounded-lg border bg-muted flex items-center justify-center overflow-hidden cursor-pointer hover:opacity-90 transition-opacity" onClick={() => asset.photo_url && setIsImageDialogOpen(true)}>
                   {asset.photo_url ? <img src={asset.photo_url} alt={asset.name} className="w-full h-full object-cover" /> : <div className="text-center p-4">
                       <div className="text-6xl mb-2">📦</div>
                       <p className="text-sm text-muted-foreground">No photo available</p>
@@ -366,7 +363,7 @@ const AssetDetail = () => {
                         <td className="p-2 text-sm font-semibold">₹{asset.cost?.toLocaleString() || '0.00'}</td>
                       </tr>
                       <tr className="border-b">
-                        <td className="p-2 text-sm font-semibold">Brand</td>
+                        <td className="p-2 text-sm font-semibold">​Make</td>
                         <td className="p-2 text-sm">{asset.brand || '—'}</td>
                       </tr>
                       <tr>
@@ -478,21 +475,10 @@ const AssetDetail = () => {
         <DialogContent className="max-w-4xl w-full p-0 overflow-hidden">
           <DialogTitle className="sr-only">Asset Image</DialogTitle>
           <div className="relative">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute top-2 right-2 z-10 bg-background/80 hover:bg-background"
-              onClick={() => setIsImageDialogOpen(false)}
-            >
+            <Button variant="ghost" size="icon" className="absolute top-2 right-2 z-10 bg-background/80 hover:bg-background" onClick={() => setIsImageDialogOpen(false)}>
               <X className="h-4 w-4" />
             </Button>
-            {asset.photo_url && (
-              <img 
-                src={asset.photo_url} 
-                alt={asset.name} 
-                className="w-full h-auto max-h-[85vh] object-contain"
-              />
-            )}
+            {asset.photo_url && <img src={asset.photo_url} alt={asset.name} className="w-full h-auto max-h-[85vh] object-contain" />}
           </div>
         </DialogContent>
       </Dialog>

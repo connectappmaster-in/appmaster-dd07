@@ -7,7 +7,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Edit, UserCheck, AlertTriangle, Wrench, AlertCircle, Trash2, Mail, Copy, ChevronLeft, ChevronRight } from "lucide-react";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { Edit, UserCheck, AlertTriangle, Wrench, AlertCircle, Trash2, Mail, Copy, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { DetailsTab } from "./[assetId]/tabs/DetailsTab";
@@ -29,6 +30,7 @@ const AssetDetail = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isImageDialogOpen, setIsImageDialogOpen] = useState(false);
 
   // Fetch asset details
   const {
@@ -334,10 +336,13 @@ const AssetDetail = () => {
         {/* Top Section with Photo and Details */}
         <Card>
           <CardContent className="p-4">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-              {/* Asset Photo */}
-              <div className="lg:col-span-1">
-                <div className="aspect-square rounded-lg border bg-muted flex items-center justify-center overflow-hidden max-h-[240px]">
+            <div className="flex gap-4">
+              {/* Asset Photo - Reduced Width */}
+              <div className="flex-shrink-0">
+                <div 
+                  className="w-48 h-48 rounded-lg border bg-muted flex items-center justify-center overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
+                  onClick={() => asset.photo_url && setIsImageDialogOpen(true)}
+                >
                   {asset.photo_url ? <img src={asset.photo_url} alt={asset.name} className="w-full h-full object-cover" /> : <div className="text-center p-4">
                       <div className="text-6xl mb-2">📦</div>
                       <p className="text-sm text-muted-foreground">No photo available</p>
@@ -346,7 +351,7 @@ const AssetDetail = () => {
               </div>
 
               {/* Asset Details - Two Tables */}
-              <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Left Table */}
                 <div className="border rounded-lg overflow-hidden">
                   <table className="w-full">
@@ -485,6 +490,30 @@ const AssetDetail = () => {
         });
       }
     }} asset={asset} />
+
+      {/* Image View Dialog */}
+      <Dialog open={isImageDialogOpen} onOpenChange={setIsImageDialogOpen}>
+        <DialogContent className="max-w-4xl w-full p-0 overflow-hidden">
+          <DialogTitle className="sr-only">Asset Image</DialogTitle>
+          <div className="relative">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute top-2 right-2 z-10 bg-background/80 hover:bg-background"
+              onClick={() => setIsImageDialogOpen(false)}
+            >
+              <X className="h-4 w-4" />
+            </Button>
+            {asset.photo_url && (
+              <img 
+                src={asset.photo_url} 
+                alt={asset.name} 
+                className="w-full h-auto max-h-[85vh] object-contain"
+              />
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>;
 };
 export default AssetDetail;

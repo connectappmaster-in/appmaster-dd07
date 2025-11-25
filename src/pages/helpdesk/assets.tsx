@@ -326,29 +326,7 @@ export default function HelpdeskAssets() {
 
           {/* Tools Tab */}
           <TabsContent value="tools" className="space-y-2 mt-2">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4">
-              <Button variant="outline" className="h-auto py-4 flex-col gap-2" onClick={() => navigate('/helpdesk/assets/explore/tools')}>
-                <Wrench className="h-5 w-5" />
-                <div className="text-center">
-                  <div className="font-semibold">Import / Export</div>
-                  <div className="text-xs text-muted-foreground">Import and export assets</div>
-                </div>
-              </Button>
-              <Button variant="outline" className="h-auto py-4 flex-col gap-2">
-                <Package className="h-5 w-5" />
-                <div className="text-center">
-                  <div className="font-semibold">Galleries</div>
-                  <div className="text-xs text-muted-foreground">Asset photo galleries</div>
-                </div>
-              </Button>
-              <Button variant="outline" className="h-auto py-4 flex-col gap-2">
-                <Package className="h-5 w-5" />
-                <div className="text-center">
-                  <div className="font-semibold">Audit Trail</div>
-                  <div className="text-xs text-muted-foreground">View asset audit logs</div>
-                </div>
-              </Button>
-            </div>
+            
           </TabsContent>
 
           {/* Reports Tab */}

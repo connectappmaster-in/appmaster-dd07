@@ -14,49 +14,53 @@ import { useQuery } from "@tanstack/react-query";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
-
 export default function ToolsPage() {
   const navigate = useNavigate();
   const [importing, setImporting] = useState(false);
   const [exportFormat, setExportFormat] = useState<'csv' | 'excel'>('csv');
 
   // Fetch asset photos for gallery
-  const { data: assetPhotos } = useQuery({
+  const {
+    data: assetPhotos
+  } = useQuery({
     queryKey: ['asset-photos'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('asset_photos')
-        .select('*, itam_assets(asset_id, brand, model)')
-        .order('created_at', { ascending: false });
+      const {
+        data,
+        error
+      } = await supabase.from('asset_photos').select('*, itam_assets(asset_id, brand, model)').order('created_at', {
+        ascending: false
+      });
       if (error) throw error;
       return data;
-    },
+    }
   });
 
   // Fetch audit logs
-  const { data: auditLogs } = useQuery({
+  const {
+    data: auditLogs
+  } = useQuery({
     queryKey: ['asset-events'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('asset_events')
-        .select('*, itam_assets(asset_id, brand, model)')
-        .order('performed_at', { ascending: false })
-        .limit(50);
+      const {
+        data,
+        error
+      } = await supabase.from('asset_events').select('*, itam_assets(asset_id, brand, model)').order('performed_at', {
+        ascending: false
+      }).limit(50);
       if (error) throw error;
       return data;
-    },
+    }
   });
-
   const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
     setImporting(true);
     try {
       const text = await file.text();
       const lines = text.split('\n');
       const headers = lines[0].split(',').map(h => h.trim());
-      
+
       // Parse CSV data
       const assets = [];
       for (let i = 1; i < lines.length; i++) {
@@ -72,7 +76,6 @@ export default function ToolsPage() {
       // Insert assets (you would map CSV columns to database columns)
       toast.success(`Parsed ${assets.length} assets from CSV. Ready to import.`);
       console.log('Assets to import:', assets);
-      
     } catch (error) {
       toast.error('Failed to import file');
       console.error(error);
@@ -80,27 +83,22 @@ export default function ToolsPage() {
       setImporting(false);
     }
   };
-
   const handleExport = async () => {
     try {
-      const { data: assets, error } = await supabase
-        .from('itam_assets')
-        .select('*')
-        .order('created_at', { ascending: false });
-
+      const {
+        data: assets,
+        error
+      } = await supabase.from('itam_assets').select('*').order('created_at', {
+        ascending: false
+      });
       if (error) throw error;
-
       if (exportFormat === 'csv') {
         // Generate CSV
         const headers = Object.keys(assets[0] || {});
-        const csvContent = [
-          headers.join(','),
-          ...assets.map(asset => 
-            headers.map(header => `"${asset[header] || ''}"`).join(',')
-          )
-        ].join('\n');
-
-        const blob = new Blob([csvContent], { type: 'text/csv' });
+        const csvContent = [headers.join(','), ...assets.map(asset => headers.map(header => `"${asset[header] || ''}"`).join(','))].join('\n');
+        const blob = new Blob([csvContent], {
+          type: 'text/csv'
+        });
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -115,16 +113,13 @@ export default function ToolsPage() {
       console.error(error);
     }
   };
-
   const generateQRCode = () => {
     toast.info('QR Code generator - Navigate to asset details to generate individual QR codes');
   };
-
-  return (
-    <div className="space-y-4">
+  return <div className="space-y-4">
       <div>
-        <h2 className="text-xl font-semibold">Asset Management Tools</h2>
-        <p className="text-sm text-muted-foreground">Import, export, and manage your IT assets efficiently</p>
+        
+        
       </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -142,14 +137,7 @@ export default function ToolsPage() {
             <CardContent className="space-y-3">
               <div className="space-y-2">
                 <Label htmlFor="import-file" className="text-xs">Import Assets</Label>
-                <Input 
-                  id="import-file"
-                  type="file" 
-                  accept=".csv,.xlsx,.xls" 
-                  onChange={handleImport} 
-                  disabled={importing}
-                  className="cursor-pointer h-8 text-xs"
-                />
+                <Input id="import-file" type="file" accept=".csv,.xlsx,.xls" onChange={handleImport} disabled={importing} className="cursor-pointer h-8 text-xs" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="export-format" className="text-xs">Export Format</Label>
@@ -201,14 +189,9 @@ export default function ToolsPage() {
                 </DialogDescription>
               </DialogHeader>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
-                {assetPhotos?.map((photo: any) => (
-                  <div key={photo.id} className="space-y-2">
+                {assetPhotos?.map((photo: any) => <div key={photo.id} className="space-y-2">
                     <div className="aspect-square rounded-lg overflow-hidden bg-muted">
-                      <img 
-                        src={photo.photo_url} 
-                        alt="Asset" 
-                        className="w-full h-full object-cover hover:scale-110 transition-transform"
-                      />
+                      <img src={photo.photo_url} alt="Asset" className="w-full h-full object-cover hover:scale-110 transition-transform" />
                     </div>
                     <div className="text-xs">
                       <p className="font-medium truncate">
@@ -218,13 +201,10 @@ export default function ToolsPage() {
                         {photo.itam_assets?.asset_id}
                       </p>
                     </div>
-                  </div>
-                ))}
-                {(!assetPhotos || assetPhotos.length === 0) && (
-                  <div className="col-span-full text-center py-12 text-muted-foreground">
+                  </div>)}
+                {(!assetPhotos || assetPhotos.length === 0) && <div className="col-span-full text-center py-12 text-muted-foreground">
                     No photos available
-                  </div>
-                )}
+                  </div>}
               </div>
             </DialogContent>
           </Dialog>
@@ -271,8 +251,7 @@ export default function ToolsPage() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {auditLogs?.map((log: any) => (
-                      <TableRow key={log.id}>
+                    {auditLogs?.map((log: any) => <TableRow key={log.id}>
                         <TableCell className="text-xs">
                           {log.performed_at ? format(new Date(log.performed_at), 'MMM dd, yyyy HH:mm') : '—'}
                         </TableCell>
@@ -290,15 +269,12 @@ export default function ToolsPage() {
                         <TableCell className="text-xs text-muted-foreground">
                           {log.performed_by || '—'}
                         </TableCell>
-                      </TableRow>
-                    ))}
-                    {(!auditLogs || auditLogs.length === 0) && (
-                      <TableRow>
+                      </TableRow>)}
+                    {(!auditLogs || auditLogs.length === 0) && <TableRow>
                         <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
                           No audit logs available
                         </TableCell>
-                      </TableRow>
-                    )}
+                      </TableRow>}
                   </TableBody>
                 </Table>
               </div>
@@ -449,6 +425,5 @@ export default function ToolsPage() {
             </CardContent>
           </Card>
       </div>
-    </div>
-  );
+    </div>;
 }

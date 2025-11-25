@@ -303,35 +303,27 @@ const AssetDetail = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-48">
                 <DropdownMenuItem onClick={() => handleAction("check_in")}>
-                  <UserCheck className="h-4 w-4 mr-2" />
                   Check in
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => handleAction("lost")}>
-                  <AlertTriangle className="h-4 w-4 mr-2" />
-                  Lost / Missing
+                  Lost
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => handleAction("repair")}>
-                  <Wrench className="h-4 w-4 mr-2" />
                   Repair
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => handleAction("broken")}>
-                  <AlertCircle className="h-4 w-4 mr-2" />
                   Broken
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => handleAction("dispose")}>
-                  <Trash2 className="h-4 w-4 mr-2" />
                   Dispose
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => handleAction("delete")} className="text-red-600">
-                  <Trash2 className="h-4 w-4 mr-2" />
                   Delete
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => handleAction("email")}>
-                  <Mail className="h-4 w-4 mr-2" />
                   Email
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => handleAction("replicate")}>
-                  <Copy className="h-4 w-4 mr-2" />
                   Replicate
                 </DropdownMenuItem>
               </DropdownMenuContent>

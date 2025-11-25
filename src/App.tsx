@@ -27,6 +27,7 @@ import HelpdeskTickets from "./pages/helpdesk/tickets/index";
 import TicketDetail from "./pages/helpdesk/tickets/[id]";
 import NewTicket from "./pages/helpdesk/new";
 import HelpdeskAssets from "./pages/helpdesk/assets";
+import HelpdeskAllAssets from "./pages/helpdesk/assets/allasset";
 import AssetDetail from "./pages/helpdesk/assets/detail/[assetId]";
 import AssetReports from "./pages/helpdesk/assets/reports";
 // Assets Explore imports
@@ -185,6 +186,7 @@ const App = () => {
             <Route path="service-requests/change-management/approvals" element={<ChangeManagementApprovals />} />
             
             <Route path="assets" element={<HelpdeskAssets />} />
+            <Route path="assets/allasset" element={<HelpdeskAllAssets />} />
             <Route path="assets/detail/:assetId" element={<AssetDetail />} />
             <Route path="assets/reports" element={<AssetReports />} />
             {/* Assets Explore Routes */}

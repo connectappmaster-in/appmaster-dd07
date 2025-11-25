@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import AssetsTools from "./assets/tools";
+import AssetsTools from "./tools";
 import { Plus, Package, UserCheck, Search, LayoutDashboard, FileText, Wrench, Settings, ChevronDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -96,7 +96,7 @@ export default function HelpdeskAssets() {
                 <LayoutDashboard className="h-3.5 w-3.5" />
                 Overview
               </TabsTrigger>
-              <TabsTrigger value="all" className="gap-1.5 px-3 text-sm h-7" onClick={() => navigate('/helpdesk/assets/allasset')}>
+              <TabsTrigger value="all" className="gap-1.5 px-3 text-sm h-7">
                 <Package className="h-3.5 w-3.5" />
                 All Assets
                 {allAssets.length > 0}

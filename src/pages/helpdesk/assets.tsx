@@ -96,7 +96,7 @@ export default function HelpdeskAssets() {
                 <LayoutDashboard className="h-3.5 w-3.5" />
                 Overview
               </TabsTrigger>
-              <TabsTrigger value="all" className="gap-1.5 px-3 text-sm h-7" onClick={() => navigate('/helpdesk/assets/allasset')}>
+              <TabsTrigger value="all" className="gap-1.5 px-3 text-sm h-7">
                 <Package className="h-3.5 w-3.5" />
                 All Assets
                 {allAssets.length > 0}

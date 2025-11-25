@@ -340,7 +340,7 @@ const AssetDetail = () => {
               {/* Asset Photo - Reduced Width */}
               <div className="flex-shrink-0">
                 <div 
-                  className="w-48 h-48 rounded-lg border bg-muted flex items-center justify-center overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
+                  className="w-48 h-full rounded-lg border bg-muted flex items-center justify-center overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
                   onClick={() => asset.photo_url && setIsImageDialogOpen(true)}
                 >
                   {asset.photo_url ? <img src={asset.photo_url} alt={asset.name} className="w-full h-full object-cover" /> : <div className="text-center p-4">

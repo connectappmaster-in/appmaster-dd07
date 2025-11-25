@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Loader2, ImagePlus } from "lucide-react";
 import { ImagePickerDialog } from "./ImagePickerDialog";
+import { useAssetSetupConfig } from "@/hooks/useAssetSetupConfig";
 const assetSchema = z.object({
   asset_id: z.string().min(1, "Asset ID is required"),
   brand: z.string().min(1, "Make is required"),
@@ -39,6 +40,7 @@ export const CreateAssetDialog = ({
 }: CreateAssetDialogProps) => {
   const queryClient = useQueryClient();
   const [imagePickerOpen, setImagePickerOpen] = useState(false);
+  const { sites, locations, categories, departments } = useAssetSetupConfig();
   const form = useForm<z.infer<typeof assetSchema>>({
     resolver: zodResolver(assetSchema),
     defaultValues: {
@@ -278,9 +280,20 @@ export const CreateAssetDialog = ({
                 field
               }) => <FormItem>
                       <FormLabel className="text-xs">Site</FormLabel>
-                      <FormControl>
-                        <Input className="h-8" {...field} />
-                      </FormControl>
+                      <Select value={field.value} onValueChange={field.onChange}>
+                        <FormControl>
+                          <SelectTrigger className="h-8">
+                            <SelectValue placeholder="Select site" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {sites.map((site) => (
+                            <SelectItem key={site.id} value={site.name}>
+                              {site.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>} />
 
@@ -288,9 +301,20 @@ export const CreateAssetDialog = ({
                 field
               }) => <FormItem>
                       <FormLabel className="text-xs">Location</FormLabel>
-                      <FormControl>
-                        <Input className="h-8" {...field} />
-                      </FormControl>
+                      <Select value={field.value} onValueChange={field.onChange}>
+                        <FormControl>
+                          <SelectTrigger className="h-8">
+                            <SelectValue placeholder="Select location" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {locations.map((location) => (
+                            <SelectItem key={location.id} value={location.name}>
+                              {location.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>} />
 
@@ -305,16 +329,26 @@ export const CreateAssetDialog = ({
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="Laptop">Laptop</SelectItem>
-                          <SelectItem value="Desktop">Desktop</SelectItem>
-                          <SelectItem value="Monitor">Monitor</SelectItem>
-                          <SelectItem value="Printer">Printer</SelectItem>
-                          <SelectItem value="Phone">Phone</SelectItem>
-                          <SelectItem value="Tablet">Tablet</SelectItem>
-                          <SelectItem value="Server">Server</SelectItem>
-                          <SelectItem value="Network Device">Network Device</SelectItem>
-                          <SelectItem value="Furniture">Furniture</SelectItem>
-                          <SelectItem value="Other">Other</SelectItem>
+                          {categories.length > 0 ? (
+                            categories.map((category) => (
+                              <SelectItem key={category.id} value={category.name}>
+                                {category.name}
+                              </SelectItem>
+                            ))
+                          ) : (
+                            <>
+                              <SelectItem value="Laptop">Laptop</SelectItem>
+                              <SelectItem value="Desktop">Desktop</SelectItem>
+                              <SelectItem value="Monitor">Monitor</SelectItem>
+                              <SelectItem value="Printer">Printer</SelectItem>
+                              <SelectItem value="Phone">Phone</SelectItem>
+                              <SelectItem value="Tablet">Tablet</SelectItem>
+                              <SelectItem value="Server">Server</SelectItem>
+                              <SelectItem value="Network Device">Network Device</SelectItem>
+                              <SelectItem value="Furniture">Furniture</SelectItem>
+                              <SelectItem value="Other">Other</SelectItem>
+                            </>
+                          )}
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -324,9 +358,20 @@ export const CreateAssetDialog = ({
                 field
               }) => <FormItem>
                       <FormLabel className="text-xs">Department</FormLabel>
-                      <FormControl>
-                        <Input className="h-8" {...field} />
-                      </FormControl>
+                      <Select value={field.value} onValueChange={field.onChange}>
+                        <FormControl>
+                          <SelectTrigger className="h-8">
+                            <SelectValue placeholder="Select department" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {departments.map((dept) => (
+                            <SelectItem key={dept.id} value={dept.name}>
+                              {dept.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>} />
               </div>

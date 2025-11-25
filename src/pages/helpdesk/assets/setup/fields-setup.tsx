@@ -39,11 +39,11 @@ export default function FieldsSetupPage() {
     { id: 3, name: "HR", code: "HR" },
   ]);
 
-  const [tagFormat, setTagFormat] = useState({
-    prefix: "RT-",
-    startNumber: "0001",
-    autoIncrement: true,
-  });
+  const [tagSeries, setTagSeries] = useState([
+    { id: 1, category: "Laptop", prefix: "RT-LTP-", current: 1 },
+    { id: 2, category: "Monitor", prefix: "RT-MTR-", current: 1 },
+    { id: 3, category: "Equipment", prefix: "RT-EQP-", current: 1 },
+  ]);
 
   return (
     <div className="min-h-screen bg-background p-4">
@@ -305,45 +305,72 @@ export default function FieldsSetupPage() {
           {/* Tag Format */}
           <TabsContent value="tag-format" className="mt-4">
             <Card>
-              <CardHeader>
-                <CardTitle className="text-base flex items-center gap-2">
-                  <Hash className="h-4 w-4" />
-                  Asset Tag Format
-                </CardTitle>
-                <CardDescription className="text-xs">
-                  Configure how asset tags are generated
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="tag-prefix">Prefix</Label>
-                    <Input
-                      id="tag-prefix"
-                      value={tagFormat.prefix}
-                      onChange={(e) => setTagFormat({ ...tagFormat, prefix: e.target.value })}
-                      placeholder="e.g., RT-, IT-, AS-"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="tag-start">Starting Number</Label>
-                    <Input
-                      id="tag-start"
-                      value={tagFormat.startNumber}
-                      onChange={(e) => setTagFormat({ ...tagFormat, startNumber: e.target.value })}
-                      placeholder="e.g., 0001, 0100, 5000"
-                    />
-                  </div>
+              <CardHeader className="flex flex-row items-center justify-between pb-3">
+                <div>
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <Hash className="h-4 w-4" />
+                    Asset Tag Series
+                  </CardTitle>
+                  <CardDescription className="text-xs">
+                    Configure tag formats for different asset categories
+                  </CardDescription>
                 </div>
-                <div className="p-4 bg-muted rounded-md">
-                  <div className="text-sm font-medium mb-2">Preview:</div>
-                  <div className="text-lg font-mono">
-                    {tagFormat.prefix}{tagFormat.startNumber}
-                  </div>
-                </div>
-                <Button size="sm" onClick={() => toast.success("Tag format saved")}>
-                  Save Tag Format
+                <Button size="sm">
+                  <Plus className="h-3 w-3 mr-2" />
+                  Add Series
                 </Button>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>CATEGORY</TableHead>
+                      <TableHead>PREFIX</TableHead>
+                      <TableHead>CURRENT NUMBER</TableHead>
+                      <TableHead>PREVIEW</TableHead>
+                      <TableHead className="text-right">ACTIONS</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {tagSeries.map((series) => (
+                      <TableRow key={series.id}>
+                        <TableCell className="font-medium">{series.category}</TableCell>
+                        <TableCell>
+                          <Badge variant="secondary">{series.prefix}</Badge>
+                        </TableCell>
+                        <TableCell>{String(series.current).padStart(3, '0')}</TableCell>
+                        <TableCell className="font-mono text-sm">
+                          {series.prefix}{String(series.current).padStart(3, '0')}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <Button variant="ghost" size="icon" className="h-7 w-7">
+                            <Pencil className="h-3 w-3" />
+                          </Button>
+                          <Button variant="ghost" size="icon" className="h-7 w-7">
+                            <Trash2 className="h-3 w-3" />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+                <div className="mt-4 p-4 bg-muted/50 rounded-lg">
+                  <h4 className="text-sm font-semibold mb-2">Next Available Tags:</h4>
+                  <div className="grid grid-cols-3 gap-4">
+                    {tagSeries.map((series) => (
+                      <div key={series.id} className="space-y-1">
+                        <div className="text-xs text-muted-foreground">{series.category}</div>
+                        <div className="space-y-0.5">
+                          {[0, 1, 2].map((offset) => (
+                            <div key={offset} className="font-mono text-xs">
+                              {series.prefix}{String(series.current + offset).padStart(3, '0')}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>

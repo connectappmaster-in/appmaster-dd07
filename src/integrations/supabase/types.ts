@@ -3971,50 +3971,53 @@ export type Database = {
           },
         ]
       }
-      itam_tag_format: {
+      itam_tag_series: {
         Row: {
-          auto_increment: boolean | null
+          category_name: string
           created_at: string | null
           current_number: number | null
           id: string
+          is_active: boolean | null
           organisation_id: string | null
+          padding_length: number | null
           prefix: string
-          start_number: string
           tenant_id: number
           updated_at: string | null
         }
         Insert: {
-          auto_increment?: boolean | null
+          category_name: string
           created_at?: string | null
           current_number?: number | null
           id?: string
+          is_active?: boolean | null
           organisation_id?: string | null
-          prefix?: string
-          start_number?: string
+          padding_length?: number | null
+          prefix: string
           tenant_id: number
           updated_at?: string | null
         }
         Update: {
-          auto_increment?: boolean | null
+          category_name?: string
           created_at?: string | null
           current_number?: number | null
           id?: string
+          is_active?: boolean | null
           organisation_id?: string | null
+          padding_length?: number | null
           prefix?: string
-          start_number?: string
           tenant_id?: number
           updated_at?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "itam_tag_format_organisation_id_fkey"
+            foreignKeyName: "itam_tag_series_organisation_id_fkey"
             columns: ["organisation_id"]
             isOneToOne: false
             referencedRelation: "organisations"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "itam_tag_format_tenant_id_fkey"
+            foreignKeyName: "itam_tag_series_tenant_id_fkey"
             columns: ["tenant_id"]
             isOneToOne: false
             referencedRelation: "tenants"
@@ -7514,6 +7517,13 @@ export type Database = {
         }[]
       }
       get_monthly_burn_rate: { Args: { org_id: string }; Returns: number }
+      get_next_asset_tags: {
+        Args: { p_limit?: number; p_organisation_id: string }
+        Returns: {
+          category_name: string
+          suggested_tags: string[]
+        }[]
+      }
       get_subscription_limits: {
         Args: { org_id: string }
         Returns: {

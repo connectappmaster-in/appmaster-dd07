@@ -121,32 +121,32 @@ export default function ToolsPage() {
     <div className="min-h-screen bg-background">
       <AssetTopBar />
       
-      <div className="px-4 space-y-6">
+      <div className="px-4 py-4 space-y-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Asset Management Tools</h1>
-          <p className="text-muted-foreground mt-2">
+          <h1 className="text-2xl font-bold tracking-tight">Asset Management Tools</h1>
+          <p className="text-sm text-muted-foreground mt-1">
             Comprehensive tools for managing your IT assets
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
           {/* Import / Export */}
           <Card className="border hover:border-primary/50 transition-all hover:shadow-md">
-            <CardHeader className="pb-3">
-              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-2">
-                <Upload className="h-5 w-5 text-primary" />
+            <CardHeader className="pb-2">
+              <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center mb-1.5">
+                <Upload className="h-4 w-4 text-primary" />
               </div>
-              <CardTitle className="text-base">Import / Export</CardTitle>
+              <CardTitle className="text-sm font-semibold">Import / Export</CardTitle>
               <CardDescription className="text-xs">
                 Bulk import/export assets
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="space-y-2">
+            <CardContent className="space-y-2">
+              <div className="space-y-1.5">
                 <Label htmlFor="import-file" className="text-xs">Import Assets</Label>
                 <Input id="import-file" type="file" accept=".csv,.xlsx,.xls" onChange={handleImport} disabled={importing} className="cursor-pointer h-8 text-xs" />
               </div>
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 <Label htmlFor="export-format" className="text-xs">Export Format</Label>
                 <Select value={exportFormat} onValueChange={(v: any) => setExportFormat(v)}>
                   <SelectTrigger id="export-format" className="h-8 text-xs">
@@ -158,8 +158,8 @@ export default function ToolsPage() {
                   </SelectContent>
                 </Select>
               </div>
-              <Button onClick={handleExport} className="w-full h-8 text-xs">
-                <Download className="h-3 w-3 mr-2" />
+              <Button onClick={handleExport} className="w-full h-7 text-xs">
+                <Download className="h-3 w-3 mr-1.5" />
                 Export Assets
               </Button>
             </CardContent>
@@ -169,20 +169,20 @@ export default function ToolsPage() {
           <Dialog>
             <DialogTrigger asChild>
               <Card className="border hover:border-primary/50 transition-all hover:shadow-md cursor-pointer">
-                <CardHeader className="pb-3">
-                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-2">
-                    <FileImage className="h-5 w-5 text-primary" />
+                <CardHeader className="pb-2">
+                  <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center mb-1.5">
+                    <FileImage className="h-4 w-4 text-primary" />
                   </div>
-                  <CardTitle className="text-base">Photo Gallery</CardTitle>
+                  <CardTitle className="text-sm font-semibold">Photo Gallery</CardTitle>
                   <CardDescription className="text-xs">
                     Browse asset photos
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-xs text-muted-foreground mb-3">
+                  <div className="text-xs text-muted-foreground mb-2">
                     {assetPhotos?.length || 0} photos
                   </div>
-                  <Button variant="outline" className="w-full h-8 text-xs">
+                  <Button variant="outline" className="w-full h-7 text-xs">
                     Open Gallery
                   </Button>
                 </CardContent>
@@ -220,20 +220,20 @@ export default function ToolsPage() {
           <Dialog>
             <DialogTrigger asChild>
               <Card className="border hover:border-primary/50 transition-all hover:shadow-md cursor-pointer">
-                <CardHeader className="pb-3">
-                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-2">
-                    <History className="h-5 w-5 text-primary" />
+                <CardHeader className="pb-2">
+                  <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center mb-1.5">
+                    <History className="h-4 w-4 text-primary" />
                   </div>
-                  <CardTitle className="text-base">Audit Trail</CardTitle>
+                  <CardTitle className="text-sm font-semibold">Audit Trail</CardTitle>
                   <CardDescription className="text-xs">
                     Asset history logs
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-xs text-muted-foreground mb-3">
+                  <div className="text-xs text-muted-foreground mb-2">
                     {auditLogs?.length || 0} events
                   </div>
-                  <Button variant="outline" className="w-full h-8 text-xs">
+                  <Button variant="outline" className="w-full h-7 text-xs">
                     View Logs
                   </Button>
                 </CardContent>
@@ -290,17 +290,17 @@ export default function ToolsPage() {
 
           {/* QR Code Generator */}
           <Card className="border hover:border-primary/50 transition-all hover:shadow-md cursor-pointer" onClick={generateQRCode}>
-            <CardHeader className="pb-3">
-              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-2">
-                <QrCode className="h-5 w-5 text-primary" />
+            <CardHeader className="pb-2">
+              <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center mb-1.5">
+                <QrCode className="h-4 w-4 text-primary" />
               </div>
-              <CardTitle className="text-base">QR Codes</CardTitle>
+              <CardTitle className="text-sm font-semibold">QR Codes</CardTitle>
               <CardDescription className="text-xs">
                 Generate asset QR codes
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button variant="outline" className="w-full h-8 text-xs">
+              <Button variant="outline" className="w-full h-7 text-xs">
                 Generate Codes
               </Button>
             </CardContent>
@@ -308,17 +308,17 @@ export default function ToolsPage() {
 
           {/* Barcode Scanner */}
           <Card className="border hover:border-primary/50 transition-all hover:shadow-md cursor-pointer" onClick={() => toast.info('Barcode scanner coming soon')}>
-            <CardHeader className="pb-3">
-              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-2">
-                <Barcode className="h-5 w-5 text-primary" />
+            <CardHeader className="pb-2">
+              <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center mb-1.5">
+                <Barcode className="h-4 w-4 text-primary" />
               </div>
-              <CardTitle className="text-base">Barcode Scanner</CardTitle>
+              <CardTitle className="text-sm font-semibold">Barcode Scanner</CardTitle>
               <CardDescription className="text-xs">
                 Quick asset lookup
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button variant="outline" className="w-full h-8 text-xs">
+              <Button variant="outline" className="w-full h-7 text-xs">
                 Launch Scanner
               </Button>
             </CardContent>
@@ -326,17 +326,17 @@ export default function ToolsPage() {
 
           {/* Asset Reports */}
           <Card className="border hover:border-primary/50 transition-all hover:shadow-md cursor-pointer" onClick={() => navigate('/helpdesk/assets/reports')}>
-            <CardHeader className="pb-3">
-              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-2">
-                <FileText className="h-5 w-5 text-primary" />
+            <CardHeader className="pb-2">
+              <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center mb-1.5">
+                <FileText className="h-4 w-4 text-primary" />
               </div>
-              <CardTitle className="text-base">Asset Reports</CardTitle>
+              <CardTitle className="text-sm font-semibold">Asset Reports</CardTitle>
               <CardDescription className="text-xs">
                 Comprehensive reports
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button variant="outline" className="w-full h-8 text-xs">
+              <Button variant="outline" className="w-full h-7 text-xs">
                 View Reports
               </Button>
             </CardContent>
@@ -344,17 +344,17 @@ export default function ToolsPage() {
 
           {/* Depreciation */}
           <Card className="border hover:border-primary/50 transition-all hover:shadow-md cursor-pointer" onClick={() => navigate('/helpdesk/assets/depreciation')}>
-            <CardHeader className="pb-3">
-              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-2">
-                <TrendingUp className="h-5 w-5 text-primary" />
+            <CardHeader className="pb-2">
+              <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center mb-1.5">
+                <TrendingUp className="h-4 w-4 text-primary" />
               </div>
-              <CardTitle className="text-base">Depreciation</CardTitle>
+              <CardTitle className="text-sm font-semibold">Depreciation</CardTitle>
               <CardDescription className="text-xs">
                 Track asset lifecycle
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button variant="outline" className="w-full h-8 text-xs">
+              <Button variant="outline" className="w-full h-7 text-xs">
                 Manage Lifecycle
               </Button>
             </CardContent>
@@ -362,17 +362,17 @@ export default function ToolsPage() {
 
           {/* Purchase Orders */}
           <Card className="border hover:border-primary/50 transition-all hover:shadow-md cursor-pointer" onClick={() => navigate('/helpdesk/assets/purchase-orders')}>
-            <CardHeader className="pb-3">
-              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-2">
-                <Package className="h-5 w-5 text-primary" />
+            <CardHeader className="pb-2">
+              <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center mb-1.5">
+                <Package className="h-4 w-4 text-primary" />
               </div>
-              <CardTitle className="text-base">Purchase Orders</CardTitle>
+              <CardTitle className="text-sm font-semibold">Purchase Orders</CardTitle>
               <CardDescription className="text-xs">
                 Manage asset procurement
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button variant="outline" className="w-full h-8 text-xs">
+              <Button variant="outline" className="w-full h-7 text-xs">
                 View Orders
               </Button>
             </CardContent>
@@ -380,17 +380,17 @@ export default function ToolsPage() {
 
           {/* Vendor Management */}
           <Card className="border hover:border-primary/50 transition-all hover:shadow-md cursor-pointer" onClick={() => navigate('/helpdesk/assets/vendors')}>
-            <CardHeader className="pb-3">
-              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-2">
-                <Package className="h-5 w-5 text-primary" />
+            <CardHeader className="pb-2">
+              <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center mb-1.5">
+                <Package className="h-4 w-4 text-primary" />
               </div>
-              <CardTitle className="text-base">Vendors</CardTitle>
+              <CardTitle className="text-sm font-semibold">Vendors</CardTitle>
               <CardDescription className="text-xs">
                 Manage asset vendors
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button variant="outline" className="w-full h-8 text-xs">
+              <Button variant="outline" className="w-full h-7 text-xs">
                 View Vendors
               </Button>
             </CardContent>
@@ -398,17 +398,17 @@ export default function ToolsPage() {
 
           {/* License Management */}
           <Card className="border hover:border-primary/50 transition-all hover:shadow-md cursor-pointer" onClick={() => navigate('/helpdesk/assets/licenses')}>
-            <CardHeader className="pb-3">
-              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-2">
-                <FileText className="h-5 w-5 text-primary" />
+            <CardHeader className="pb-2">
+              <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center mb-1.5">
+                <FileText className="h-4 w-4 text-primary" />
               </div>
-              <CardTitle className="text-base">Licenses</CardTitle>
+              <CardTitle className="text-sm font-semibold">Licenses</CardTitle>
               <CardDescription className="text-xs">
                 Software license tracking
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button variant="outline" className="w-full h-8 text-xs">
+              <Button variant="outline" className="w-full h-7 text-xs">
                 Manage Licenses
               </Button>
             </CardContent>
@@ -416,17 +416,17 @@ export default function ToolsPage() {
 
           {/* Repairs & Maintenance */}
           <Card className="border hover:border-primary/50 transition-all hover:shadow-md cursor-pointer" onClick={() => navigate('/helpdesk/assets/repairs')}>
-            <CardHeader className="pb-3">
-              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-2">
-                <Wrench className="h-5 w-5 text-primary" />
+            <CardHeader className="pb-2">
+              <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center mb-1.5">
+                <Wrench className="h-4 w-4 text-primary" />
               </div>
-              <CardTitle className="text-base">Repairs</CardTitle>
+              <CardTitle className="text-sm font-semibold">Repairs</CardTitle>
               <CardDescription className="text-xs">
                 Track asset repairs
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button variant="outline" className="w-full h-8 text-xs">
+              <Button variant="outline" className="w-full h-7 text-xs">
                 View Repairs
               </Button>
             </CardContent>

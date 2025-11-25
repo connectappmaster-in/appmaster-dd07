@@ -64,7 +64,7 @@ export const AssetsList = ({ status, filters = {}, onSelectionChange }: AssetsLi
 
   const getSortIcon = (column: SortColumn) => {
     if (sortColumn !== column) {
-      return <ArrowUpDown className="ml-1 h-3 w-3 opacity-50" />;
+      return <ArrowUpDown className="ml-1 h-3 w-3 opacity-0 group-hover:opacity-50 transition-opacity" />;
     }
     if (sortDirection === 'asc') {
       return <ChevronUp className="ml-1 h-3 w-3" />;
@@ -279,7 +279,7 @@ export const AssetsList = ({ status, filters = {}, onSelectionChange }: AssetsLi
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="h-7 px-2 -ml-2 hover:bg-muted"
+                  className="h-7 px-2 -ml-2 hover:bg-muted group"
                   onClick={() => handleSort('asset_id')}
                 >
                   ASSET ID
@@ -290,7 +290,7 @@ export const AssetsList = ({ status, filters = {}, onSelectionChange }: AssetsLi
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="h-7 px-2 -ml-2 hover:bg-muted"
+                  className="h-7 px-2 -ml-2 hover:bg-muted group"
                   onClick={() => handleSort('brand')}
                 >
                   MAKE
@@ -301,7 +301,7 @@ export const AssetsList = ({ status, filters = {}, onSelectionChange }: AssetsLi
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="h-7 px-2 -ml-2 hover:bg-muted"
+                  className="h-7 px-2 -ml-2 hover:bg-muted group"
                   onClick={() => handleSort('model')}
                 >
                   MODEL
@@ -312,7 +312,7 @@ export const AssetsList = ({ status, filters = {}, onSelectionChange }: AssetsLi
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="h-7 px-2 -ml-2 hover:bg-muted"
+                  className="h-7 px-2 -ml-2 hover:bg-muted group"
                   onClick={() => handleSort('description')}
                 >
                   DESCRIPTION
@@ -323,7 +323,7 @@ export const AssetsList = ({ status, filters = {}, onSelectionChange }: AssetsLi
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="h-7 px-2 -ml-2 hover:bg-muted"
+                  className="h-7 px-2 -ml-2 hover:bg-muted group"
                   onClick={() => handleSort('serial_number')}
                 >
                   SERIAL NO
@@ -334,7 +334,7 @@ export const AssetsList = ({ status, filters = {}, onSelectionChange }: AssetsLi
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="h-7 px-2 -ml-2 hover:bg-muted"
+                  className="h-7 px-2 -ml-2 hover:bg-muted group"
                   onClick={() => handleSort('category')}
                 >
                   CATEGORY
@@ -345,7 +345,7 @@ export const AssetsList = ({ status, filters = {}, onSelectionChange }: AssetsLi
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="h-7 px-2 -ml-2 hover:bg-muted"
+                  className="h-7 px-2 -ml-2 hover:bg-muted group"
                   onClick={() => handleSort('status')}
                 >
                   STATUS
@@ -356,7 +356,7 @@ export const AssetsList = ({ status, filters = {}, onSelectionChange }: AssetsLi
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="h-7 px-2 -ml-2 hover:bg-muted"
+                  className="h-7 px-2 -ml-2 hover:bg-muted group"
                   onClick={() => handleSort('assigned_to')}
                 >
                   ASSIGNED TO

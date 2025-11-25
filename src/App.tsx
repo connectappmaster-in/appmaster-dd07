@@ -29,6 +29,8 @@ import NewTicket from "./pages/helpdesk/new";
 import HelpdeskAssets from "./pages/helpdesk/assets";
 import AssetDetail from "./pages/helpdesk/assets/detail/[assetId]";
 import AssetReports from "./pages/helpdesk/assets/reports";
+import AllAssets from "./pages/helpdesk/assets/allassets";
+import AssetSetup from "./pages/helpdesk/assets/setup";
 // Assets Explore imports
 import AssetsBulkActions from "./pages/helpdesk/assets/explore/bulk-actions";
 import AssetsReports from "./pages/helpdesk/assets/explore/reports";
@@ -185,12 +187,11 @@ const App = () => {
             <Route path="service-requests/change-management/approvals" element={<ChangeManagementApprovals />} />
             
             <Route path="assets" element={<HelpdeskAssets />} />
+            <Route path="assets/allassets" element={<AllAssets />} />
             <Route path="assets/detail/:assetId" element={<AssetDetail />} />
             <Route path="assets/reports" element={<AssetReports />} />
-            {/* Assets Explore Routes */}
-            <Route path="assets/explore/bulk-actions" element={<AssetsBulkActions />} />
-            <Route path="assets/explore/reports" element={<AssetsReports />} />
             <Route path="assets/tools" element={<AssetsTools />} />
+            <Route path="assets/setup" element={<AssetSetup />} />
             <Route path="assets/explore/fields-setup" element={<AssetsFieldsSetup />} />
             <Route path="subscription" element={<HelpdeskSubscriptionLayout />}>
               <Route index element={<HelpdeskSubscriptionDashboard />} />

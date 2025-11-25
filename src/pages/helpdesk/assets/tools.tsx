@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { AssetTopBar } from "@/components/ITAM/AssetTopBar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -116,11 +117,17 @@ export default function ToolsPage() {
   const generateQRCode = () => {
     toast.info('QR Code generator - Navigate to asset details to generate individual QR codes');
   };
-  return <div className="space-y-4">
-      <div>
-        
-        
-      </div>
+  return (
+    <div className="min-h-screen bg-background">
+      <AssetTopBar />
+      
+      <div className="px-4 space-y-6">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Asset Management Tools</h1>
+          <p className="text-muted-foreground mt-2">
+            Comprehensive tools for managing your IT assets
+          </p>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {/* Import / Export */}
@@ -424,6 +431,8 @@ export default function ToolsPage() {
               </Button>
             </CardContent>
           </Card>
+        </div>
       </div>
-    </div>;
+    </div>
+  );
 }

@@ -84,7 +84,7 @@ export default function ListsPage() {
                 <TableHeader>
                   <TableRow>
                     <TableHead>ASSET ID</TableHead>
-                    <TableHead>BRAND / MODEL</TableHead>
+                    <TableHead>MAKE / MODEL</TableHead>
                     <TableHead>ISSUE</TableHead>
                     <TableHead>STATUS</TableHead>
                     <TableHead>COST</TableHead>
@@ -147,7 +147,7 @@ export default function ListsPage() {
                 <TableHeader>
                   <TableRow>
                     <TableHead>ASSET ID</TableHead>
-                    <TableHead>BRAND / MODEL</TableHead>
+                    <TableHead>MAKE / MODEL</TableHead>
                     <TableHead>WARRANTY START</TableHead>
                     <TableHead>WARRANTY END</TableHead>
                     <TableHead>AMC START</TableHead>

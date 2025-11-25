@@ -162,7 +162,7 @@ const AddAsset = () => {
     e.preventDefault();
     
     if (!formData.asset_id || !formData.brand || !formData.model) {
-      toast.error("Please fill all required fields (Asset ID, Brand, Model)");
+      toast.error("Please fill all required fields (Asset ID, Make, Model)");
       return;
     }
 
@@ -201,7 +201,7 @@ const AddAsset = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="brand">Brand *</Label>
+                    <Label htmlFor="brand">Make *</Label>
                     <Input
                       id="brand"
                       value={formData.brand}

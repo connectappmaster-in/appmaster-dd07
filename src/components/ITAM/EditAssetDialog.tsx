@@ -9,8 +9,9 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Loader2 } from "lucide-react";
-import { useEffect } from "react";
+import { Loader2, Image as ImageIcon } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ImagePickerDialog } from "./ImagePickerDialog";
 const assetSchema = z.object({
   asset_id: z.string().min(1, "Asset ID is required"),
   brand: z.string().min(1, "Brand is required"),
@@ -41,6 +42,8 @@ export const EditAssetDialog = ({
   onOpenChange
 }: EditAssetDialogProps) => {
   const queryClient = useQueryClient();
+  const [imagePickerOpen, setImagePickerOpen] = useState(false);
+  
   const form = useForm<z.infer<typeof assetSchema>>({
     resolver: zodResolver(assetSchema),
     defaultValues: {
@@ -405,17 +408,45 @@ export const EditAssetDialog = ({
 
             {/* Photo Section */}
             <div>
-              
               <FormField control={form.control} name="photo_url" render={({
               field
             }) => <FormItem>
                     <FormLabel>Add Image</FormLabel>
                     <FormControl>
-                      <Input type="text" placeholder="Enter image URL or upload to storage" {...field} />
+                      <div className="space-y-2">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => setImagePickerOpen(true)}
+                          className="w-full"
+                        >
+                          <ImageIcon className="mr-2 h-4 w-4" />
+                          Browse Images
+                        </Button>
+                        {field.value && (
+                          <div className="relative w-full h-32 border rounded-lg overflow-hidden">
+                            <img
+                              src={field.value}
+                              alt="Asset preview"
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        )}
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>} />
             </div>
+
+            <ImagePickerDialog
+              open={imagePickerOpen}
+              onOpenChange={setImagePickerOpen}
+              onImageSelect={(url) => {
+                form.setValue("photo_url", url);
+                setImagePickerOpen(false);
+              }}
+              currentImage={form.watch("photo_url")}
+            />
 
             <div className="flex justify-between pt-3 border-t">
               <Button type="button" variant="destructive" onClick={() => {

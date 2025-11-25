@@ -58,16 +58,17 @@ export const useAssetSetupConfig = () => {
     },
   });
 
-  const { data: tagFormat } = useQuery({
-    queryKey: ["itam-tag-format"],
+  const { data: tagSeries = [], isLoading: tagSeriesLoading } = useQuery({
+    queryKey: ["itam-tag-series"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("itam_tag_format")
+        .from("itam_tag_series")
         .select("*")
-        .single();
+        .eq("is_active", true)
+        .order("category_name");
       
       if (error && error.code !== "PGRST116") throw error;
-      return data || { prefix: "AST-", start_number: "0001", auto_increment: true };
+      return data || [];
     },
   });
 
@@ -76,7 +77,7 @@ export const useAssetSetupConfig = () => {
     locations,
     categories,
     departments,
-    tagFormat,
-    isLoading: sitesLoading || locationsLoading || categoriesLoading || departmentsLoading,
+    tagSeries,
+    isLoading: sitesLoading || locationsLoading || categoriesLoading || departmentsLoading || tagSeriesLoading,
   };
 };

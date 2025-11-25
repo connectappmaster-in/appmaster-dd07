@@ -12,15 +12,12 @@ import { Edit, UserCheck, AlertTriangle, Wrench, AlertCircle, Trash2, Mail, Copy
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { DetailsTab } from "./[assetId]/tabs/DetailsTab";
-import { EventsTab } from "./[assetId]/tabs/EventsTab";
-import { PhotosTab } from "./[assetId]/tabs/PhotosTab";
 import { DocsTab } from "./[assetId]/tabs/DocsTab";
 import { WarrantyTab } from "./[assetId]/tabs/WarrantyTab";
 import { HistoryTab } from "./[assetId]/tabs/HistoryTab";
 import { LinkingTab } from "./[assetId]/tabs/LinkingTab";
 import { MaintenanceTab } from "./[assetId]/tabs/MaintenanceTab";
 import { ContractsTab } from "./[assetId]/tabs/ContractsTab";
-import { ReserveTab } from "./[assetId]/tabs/ReserveTab";
 import { AuditTab } from "./[assetId]/tabs/AuditTab";
 import { EditAssetDialog } from "@/components/ITAM/EditAssetDialog";
 const AssetDetail = () => {
@@ -424,28 +421,17 @@ const AssetDetail = () => {
         <Tabs defaultValue="details" className="w-full">
           <TabsList className="w-full overflow-x-auto">
             <TabsTrigger value="details">Details</TabsTrigger>
-            <TabsTrigger value="events">Events</TabsTrigger>
-            <TabsTrigger value="photos">Photos</TabsTrigger>
             <TabsTrigger value="docs">Docs</TabsTrigger>
             <TabsTrigger value="warranty">Warranty</TabsTrigger>
             <TabsTrigger value="linking">Linking</TabsTrigger>
             <TabsTrigger value="maintenance">Maintenance</TabsTrigger>
             <TabsTrigger value="contracts">Contracts</TabsTrigger>
-            <TabsTrigger value="reserve">Reserve</TabsTrigger>
             <TabsTrigger value="audit">Audit</TabsTrigger>
             <TabsTrigger value="history">History</TabsTrigger>
           </TabsList>
 
           <TabsContent value="details" className="mt-3">
             <DetailsTab asset={asset} />
-          </TabsContent>
-
-          <TabsContent value="events" className="mt-3">
-            <EventsTab assetId={asset.id} />
-          </TabsContent>
-
-          <TabsContent value="photos" className="mt-3">
-            <PhotosTab assetId={asset.id} />
           </TabsContent>
 
           <TabsContent value="docs" className="mt-3">
@@ -466,10 +452,6 @@ const AssetDetail = () => {
 
           <TabsContent value="contracts" className="mt-3">
             <ContractsTab assetId={asset.id} />
-          </TabsContent>
-
-          <TabsContent value="reserve" className="mt-3">
-            <ReserveTab assetId={asset.id} />
           </TabsContent>
 
           <TabsContent value="audit" className="mt-3">

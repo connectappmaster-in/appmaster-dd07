@@ -329,20 +329,19 @@ export default function HelpdeskAssets() {
             />
           </TabsContent>
 
-          {/* Lists & Reports Section - Always Visible */}
-          <div className="px-4 py-3">
-            <Button variant="outline" className="h-auto py-4 flex-col gap-2 w-full sm:w-auto" onClick={() => navigate('/helpdesk/assets/explore/lists')}>
-              <Package className="h-5 w-5" />
-              <div className="text-center">
-                <div className="font-semibold">Lists & Reports</div>
-                <div className="text-xs text-muted-foreground">Maintenances, Warranties, Asset Reports, Audit</div>
-              </div>
-            </Button>
-          </div>
 
           {/* Explore Tab */}
           <TabsContent value="explore" className="space-y-2 mt-2">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4">
+              {/* Lists & Reports */}
+              <Button variant="outline" className="h-auto py-4 flex-col gap-2" onClick={() => navigate('/helpdesk/assets/explore/lists')}>
+                <Package className="h-5 w-5" />
+                <div className="text-center">
+                  <div className="font-semibold">Lists & Reports</div>
+                  <div className="text-xs text-muted-foreground">Maintenances, Warranties, Asset Reports, Audit</div>
+                </div>
+              </Button>
+
               {/* Tools */}
               <Button variant="outline" className="h-auto py-4 flex-col gap-2" onClick={() => navigate('/helpdesk/assets/explore/tools')}>
                 <Package className="h-5 w-5" />

@@ -331,7 +331,7 @@ export const CreateAssetDialog = ({
 
             {/* Photo Section */}
             <div>
-              <h3 className="text-xs font-semibold mb-1.5 text-muted-foreground uppercase">Photo (Optional)</h3>
+              
               <FormField control={form.control} name="photo_url" render={({
               field
             }) => <FormItem>

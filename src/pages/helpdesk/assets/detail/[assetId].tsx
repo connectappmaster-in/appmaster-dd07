@@ -7,7 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Edit, MoreVertical, UserCheck, AlertTriangle, Wrench, AlertCircle, Trash2, Mail, Copy, ChevronLeft, ChevronRight } from "lucide-react";
+import { Edit, UserCheck, AlertTriangle, Wrench, AlertCircle, Trash2, Mail, Copy, ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { DetailsTab } from "./[assetId]/tabs/DetailsTab";
@@ -298,7 +298,7 @@ const AssetDetail = () => {
               <DropdownMenuTrigger asChild>
                 <Button variant="default" size="sm" className="gap-1 bg-green-600 hover:bg-green-700">
                   More Actions
-                  <MoreVertical className="h-4 w-4" />
+                  
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-48">

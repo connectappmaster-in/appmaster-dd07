@@ -102,12 +102,21 @@ export default function HelpdeskAssets() {
                     {allAssets.length}
                   </Badge>}
               </TabsTrigger>
-              <TabsTrigger value="explore" className="gap-1.5 px-3 text-sm h-7">
-                Explore
+              <TabsTrigger value="tools" className="gap-1.5 px-3 text-sm h-7">
+                <Wrench className="h-3.5 w-3.5" />
+                Tools
+              </TabsTrigger>
+              <TabsTrigger value="reports" className="gap-1.5 px-3 text-sm h-7">
+                <FileText className="h-3.5 w-3.5" />
+                Reports
+              </TabsTrigger>
+              <TabsTrigger value="setup" className="gap-1.5 px-3 text-sm h-7">
+                <Settings className="h-3.5 w-3.5" />
+                Setup
               </TabsTrigger>
             </TabsList>
 
-            {activeTab !== 'overview' && <>
+            {activeTab !== 'overview' && activeTab !== 'tools' && activeTab !== 'reports' && activeTab !== 'setup' && <>
                 <div className="relative w-[250px]">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input placeholder="Search assets..." value={filters.search || ''} onChange={e => setFilters({
@@ -330,42 +339,82 @@ export default function HelpdeskAssets() {
           </TabsContent>
 
 
-          {/* Explore Tab */}
-          <TabsContent value="explore" className="space-y-2 mt-2">
+          {/* Tools Tab */}
+          <TabsContent value="tools" className="space-y-2 mt-2">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4">
-              {/* Lists & Reports */}
-              <Button variant="outline" className="h-auto py-4 flex-col gap-2" onClick={() => navigate('/helpdesk/assets/explore/lists')}>
-                <Package className="h-5 w-5" />
-                <div className="text-center">
-                  <div className="font-semibold">Lists & Reports</div>
-                  <div className="text-xs text-muted-foreground">Maintenances, Warranties, Asset Reports, Audit</div>
-                </div>
-              </Button>
-
-              {/* Tools */}
               <Button variant="outline" className="h-auto py-4 flex-col gap-2" onClick={() => navigate('/helpdesk/assets/explore/tools')}>
-                <Package className="h-5 w-5" />
+                <Wrench className="h-5 w-5" />
                 <div className="text-center">
-                  <div className="font-semibold">Tools</div>
-                  <div className="text-xs text-muted-foreground">Import, Export, Galleries, Audit</div>
+                  <div className="font-semibold">Import / Export</div>
+                  <div className="text-xs text-muted-foreground">Import and export assets</div>
                 </div>
               </Button>
+              <Button variant="outline" className="h-auto py-4 flex-col gap-2">
+                <Package className="h-5 w-5" />
+                <div className="text-center">
+                  <div className="font-semibold">Galleries</div>
+                  <div className="text-xs text-muted-foreground">Asset photo galleries</div>
+                </div>
+              </Button>
+              <Button variant="outline" className="h-auto py-4 flex-col gap-2">
+                <Package className="h-5 w-5" />
+                <div className="text-center">
+                  <div className="font-semibold">Audit Trail</div>
+                  <div className="text-xs text-muted-foreground">View asset audit logs</div>
+                </div>
+              </Button>
+            </div>
+          </TabsContent>
 
-              {/* Advanced */}
+          {/* Reports Tab */}
+          <TabsContent value="reports" className="space-y-2 mt-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4">
+              <Button variant="outline" className="h-auto py-4 flex-col gap-2" onClick={() => navigate('/helpdesk/assets/explore/lists')}>
+                <FileText className="h-5 w-5" />
+                <div className="text-center">
+                  <div className="font-semibold">Asset Reports</div>
+                  <div className="text-xs text-muted-foreground">Generate asset reports</div>
+                </div>
+              </Button>
+              <Button variant="outline" className="h-auto py-4 flex-col gap-2">
+                <Package className="h-5 w-5" />
+                <div className="text-center">
+                  <div className="font-semibold">Maintenance Reports</div>
+                  <div className="text-xs text-muted-foreground">View maintenance history</div>
+                </div>
+              </Button>
+              <Button variant="outline" className="h-auto py-4 flex-col gap-2">
+                <Package className="h-5 w-5" />
+                <div className="text-center">
+                  <div className="font-semibold">Warranty Reports</div>
+                  <div className="text-xs text-muted-foreground">Track warranties</div>
+                </div>
+              </Button>
+            </div>
+          </TabsContent>
+
+          {/* Setup Tab */}
+          <TabsContent value="setup" className="space-y-2 mt-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4">
+              <Button variant="outline" className="h-auto py-4 flex-col gap-2" onClick={() => navigate('/helpdesk/assets/explore/fields-setup')}>
+                <Settings className="h-5 w-5" />
+                <div className="text-center">
+                  <div className="font-semibold">Fields Setup</div>
+                  <div className="text-xs text-muted-foreground">Company, Sites, Categories</div>
+                </div>
+              </Button>
+              <Button variant="outline" className="h-auto py-4 flex-col gap-2">
+                <Package className="h-5 w-5" />
+                <div className="text-center">
+                  <div className="font-semibold">Tag Format</div>
+                  <div className="text-xs text-muted-foreground">Configure asset tags</div>
+                </div>
+              </Button>
               <Button variant="outline" className="h-auto py-4 flex-col gap-2" onClick={() => navigate('/helpdesk/assets/explore/advanced')}>
                 <Package className="h-5 w-5" />
                 <div className="text-center">
                   <div className="font-semibold">Advanced</div>
                   <div className="text-xs text-muted-foreground">Employees, Users</div>
-                </div>
-              </Button>
-
-              {/* Fields Setup */}
-              <Button variant="outline" className="h-auto py-4 flex-col gap-2" onClick={() => navigate('/helpdesk/assets/explore/fields-setup')}>
-                <Package className="h-5 w-5" />
-                <div className="text-center">
-                  <div className="font-semibold">Fields Setup</div>
-                  <div className="text-xs text-muted-foreground">Company, Sites, Categories, Tag Format</div>
                 </div>
               </Button>
             </div>

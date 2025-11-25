@@ -2,7 +2,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Package, Eye, Edit, UserPlus, MoreHorizontal, ArrowUpDown, ChevronUp, ChevronDown, Trash2, UserCheck, Wrench, AlertCircle } from "lucide-react";
+import { Package, MoreHorizontal, ArrowUpDown, ChevronUp, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { EditAssetDialog } from "./EditAssetDialog";
@@ -428,25 +428,22 @@ export const AssetsList = ({ status, filters = {}, onSelectionChange }: AssetsLi
                         e.stopPropagation();
                         navigate(`/helpdesk/assets/detail/${asset.id}`);
                       }}>
-                        <Eye className="mr-2 h-4 w-4" />
                         View
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={(e) => {
                         e.stopPropagation();
                         setEditAsset(asset);
                       }}>
-                        <Edit className="mr-2 h-4 w-4" />
                         Edit
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={(e) => {
                         e.stopPropagation();
                         setAssignAsset(asset);
                       }}>
-                        <UserPlus className="mr-2 h-4 w-4" />
                         Check In
                       </DropdownMenuItem>
                       <DropdownMenuItem>
-                        Lost / Missing
+                        Lost
                       </DropdownMenuItem>
                       <DropdownMenuItem>
                         Repair

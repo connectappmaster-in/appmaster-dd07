@@ -442,22 +442,92 @@ export const AssetsList = ({ status, filters = {}, onSelectionChange }: AssetsLi
                       }}>
                         Check In
                       </DropdownMenuItem>
-                      <DropdownMenuItem>
+                      <DropdownMenuItem onClick={async (e) => {
+                        e.stopPropagation();
+                        try {
+                          const { error } = await supabase
+                            .from('itam_assets')
+                            .update({ status: 'lost' })
+                            .eq('id', asset.id);
+                          if (error) throw error;
+                          toast.success('Asset marked as lost');
+                          queryClient.invalidateQueries({ queryKey: ["assets"] });
+                        } catch (error: any) {
+                          toast.error("Failed to update asset: " + error.message);
+                        }
+                      }}>
                         Lost
                       </DropdownMenuItem>
-                      <DropdownMenuItem>
+                      <DropdownMenuItem onClick={async (e) => {
+                        e.stopPropagation();
+                        try {
+                          const { error } = await supabase
+                            .from('itam_assets')
+                            .update({ status: 'in_repair' })
+                            .eq('id', asset.id);
+                          if (error) throw error;
+                          toast.success('Asset marked for repair');
+                          queryClient.invalidateQueries({ queryKey: ["assets"] });
+                        } catch (error: any) {
+                          toast.error("Failed to update asset: " + error.message);
+                        }
+                      }}>
                         Repair
                       </DropdownMenuItem>
-                      <DropdownMenuItem>
+                      <DropdownMenuItem onClick={async (e) => {
+                        e.stopPropagation();
+                        try {
+                          const { error } = await supabase
+                            .from('itam_assets')
+                            .update({ status: 'retired' })
+                            .eq('id', asset.id);
+                          if (error) throw error;
+                          toast.success('Asset marked as broken');
+                          queryClient.invalidateQueries({ queryKey: ["assets"] });
+                        } catch (error: any) {
+                          toast.error("Failed to update asset: " + error.message);
+                        }
+                      }}>
                         Broken
                       </DropdownMenuItem>
-                      <DropdownMenuItem>
+                      <DropdownMenuItem onClick={async (e) => {
+                        e.stopPropagation();
+                        try {
+                          const { error } = await supabase
+                            .from('itam_assets')
+                            .update({ status: 'disposed' })
+                            .eq('id', asset.id);
+                          if (error) throw error;
+                          toast.success('Asset disposed');
+                          queryClient.invalidateQueries({ queryKey: ["assets"] });
+                        } catch (error: any) {
+                          toast.error("Failed to update asset: " + error.message);
+                        }
+                      }}>
                         Dispose
                       </DropdownMenuItem>
-                      <DropdownMenuItem>
+                      <DropdownMenuItem onClick={(e) => {
+                        e.stopPropagation();
+                        toast.info('Replicate feature coming soon');
+                      }}>
                         Replicate
                       </DropdownMenuItem>
-                      <DropdownMenuItem className="text-destructive">
+                      <DropdownMenuItem className="text-destructive" onClick={async (e) => {
+                        e.stopPropagation();
+                        if (!confirm('Are you sure you want to delete this asset?')) return;
+                        try {
+                          const { error } = await supabase
+                            .from('itam_assets')
+                            .update({ is_deleted: true })
+                            .eq('id', asset.id);
+                          if (error) throw error;
+                          toast.success('Asset deleted');
+                          queryClient.invalidateQueries({ queryKey: ["assets"] });
+                          queryClient.invalidateQueries({ queryKey: ["assets-count"] });
+                        } catch (error: any) {
+                          toast.error("Failed to delete asset: " + error.message);
+                        }
+                      }}>
                         Delete
                       </DropdownMenuItem>
                     </DropdownMenuContent>

@@ -98,9 +98,7 @@ export default function HelpdeskAssets() {
               <TabsTrigger value="all" className="gap-1.5 px-3 text-sm h-7">
                 <Package className="h-3.5 w-3.5" />
                 All Assets
-                {allAssets.length > 0 && <Badge variant="secondary" className="ml-1.5 text-xs px-1.5 py-0">
-                    {allAssets.length}
-                  </Badge>}
+                {allAssets.length > 0}
               </TabsTrigger>
               <TabsTrigger value="tools" className="gap-1.5 px-3 text-sm h-7">
                 <Wrench className="h-3.5 w-3.5" />
@@ -126,8 +124,7 @@ export default function HelpdeskAssets() {
                 </div>
 
                 <div className="flex items-center gap-2 ml-auto">
-                  {selectedAssetIds.length > 0 && bulkActions && (
-                    <DropdownMenu>
+                  {selectedAssetIds.length > 0 && bulkActions && <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button size="sm" variant="outline" className="h-8">
                           Bulk Actions ({selectedAssetIds.length})
@@ -156,8 +153,7 @@ export default function HelpdeskAssets() {
                           Delete
                         </DropdownMenuItem>
                       </DropdownMenuContent>
-                    </DropdownMenu>
-                  )}
+                    </DropdownMenu>}
                   
                   <Select value={filters.status || 'all'} onValueChange={value => setFilters({
                 ...filters,
@@ -285,10 +281,9 @@ export default function HelpdeskAssets() {
                   </TabsList>
                   <TabsContent value="assigned" className="space-y-2">
                     <div className="space-y-2 max-h-56 overflow-y-auto">
-                      {assignments.slice(0, 5).map((assignment) => {
-                        const asset = allAssets.find(a => a.id === assignment.asset_id);
-                        return (
-                          <div key={assignment.id} className="flex items-center justify-between py-2 border-b last:border-0">
+                      {assignments.slice(0, 5).map(assignment => {
+                      const asset = allAssets.find(a => a.id === assignment.asset_id);
+                      return <div key={assignment.id} className="flex items-center justify-between py-2 border-b last:border-0">
                             <div className="flex-1">
                               <p className="text-sm font-medium">{asset?.asset_tag || 'N/A'}</p>
                               <p className="text-xs text-muted-foreground">{asset?.name || 'Unknown'}</p>
@@ -296,18 +291,14 @@ export default function HelpdeskAssets() {
                             <p className="text-xs text-muted-foreground">
                               {new Date(assignment.assigned_at || '').toLocaleDateString()}
                             </p>
-                          </div>
-                        );
-                      })}
-                      {assignments.length === 0 && (
-                        <p className="text-sm text-muted-foreground text-center py-4">No recent assignments</p>
-                      )}
+                          </div>;
+                    })}
+                      {assignments.length === 0 && <p className="text-sm text-muted-foreground text-center py-4">No recent assignments</p>}
                     </div>
                   </TabsContent>
                   <TabsContent value="repair" className="space-y-2">
                     <div className="space-y-2 max-h-56 overflow-y-auto">
-                      {maintenanceAssets.slice(0, 5).map((asset) => (
-                        <div key={asset.id} className="flex items-center justify-between py-2 border-b last:border-0">
+                      {maintenanceAssets.slice(0, 5).map(asset => <div key={asset.id} className="flex items-center justify-between py-2 border-b last:border-0">
                           <div className="flex-1">
                             <p className="text-sm font-medium">{asset.asset_tag || 'N/A'}</p>
                             <p className="text-xs text-muted-foreground">{asset.name}</p>
@@ -315,11 +306,8 @@ export default function HelpdeskAssets() {
                           <p className="text-xs text-muted-foreground">
                             {asset.category || 'N/A'}
                           </p>
-                        </div>
-                      ))}
-                      {maintenanceAssets.length === 0 && (
-                        <p className="text-sm text-muted-foreground text-center py-4">No assets under repair</p>
-                      )}
+                        </div>)}
+                      {maintenanceAssets.length === 0 && <p className="text-sm text-muted-foreground text-center py-4">No assets under repair</p>}
                     </div>
                   </TabsContent>
                 </Tabs>
@@ -329,13 +317,10 @@ export default function HelpdeskAssets() {
 
           {/* All Assets Tab */}
           <TabsContent value="all" className="space-y-2 mt-2">
-            <AssetsList 
-              filters={filters} 
-              onSelectionChange={(selectedIds, actions) => {
-                setSelectedAssetIds(selectedIds);
-                setBulkActions(actions);
-              }}
-            />
+            <AssetsList filters={filters} onSelectionChange={(selectedIds, actions) => {
+            setSelectedAssetIds(selectedIds);
+            setBulkActions(actions);
+          }} />
           </TabsContent>
 
 

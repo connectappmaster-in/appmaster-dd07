@@ -27,19 +27,12 @@ import HelpdeskTickets from "./pages/helpdesk/tickets/index";
 import TicketDetail from "./pages/helpdesk/tickets/[id]";
 import NewTicket from "./pages/helpdesk/new";
 import HelpdeskAssets from "./pages/helpdesk/assets";
-import AssetsList from "./pages/helpdesk/assets/list";
 import AssetDetail from "./pages/helpdesk/assets/detail/[assetId]";
-import AddAsset from "./pages/helpdesk/assets/add";
-import AssignAsset from "./pages/helpdesk/assets/assign";
-import ReturnAsset from "./pages/helpdesk/assets/return";
 import AssetReports from "./pages/helpdesk/assets/reports";
-import AssetSettings from "./pages/helpdesk/assets/settings";
 // Assets Explore imports
 import AssetsBulkActions from "./pages/helpdesk/assets/explore/bulk-actions";
-import AssetsLists from "./pages/helpdesk/assets/explore/lists";
 import AssetsReports from "./pages/helpdesk/assets/explore/reports";
 import AssetsTools from "./pages/helpdesk/assets/tools";
-import AssetsAdvanced from "./pages/helpdesk/assets/explore/advanced";
 import AssetsFieldsSetup from "./pages/helpdesk/assets/explore/fields-setup";
 import HelpdeskKB from "./pages/helpdesk/kb";
 import HelpdeskProblemDetail from "./pages/helpdesk/problems/[id]";
@@ -66,7 +59,6 @@ import ServiceRequestForm from "./pages/helpdesk/service-requests/request-form";
 import ServiceRequestDetail from "./pages/helpdesk/service-requests/detail/[requestId]";
 import ServiceRequestApprovals from "./pages/helpdesk/service-requests/approvals";
 import ServiceRequestAssignmentRules from "./pages/helpdesk/service-requests/assignment-rules";
-import ServiceRequestSLAPolicies from "./pages/helpdesk/service-requests/sla-policies";
 import ServiceRequestReports from "./pages/helpdesk/service-requests/reports";
 import ServiceRequestMyRequests from "./pages/helpdesk/service-requests/my-requests";
 import ChangeManagementIndex from "./pages/helpdesk/service-requests/change-management/index";
@@ -183,7 +175,6 @@ const App = () => {
             <Route path="service-requests/detail/:requestId" element={<ServiceRequestDetail />} />
             <Route path="service-requests/approvals" element={<ServiceRequestApprovals />} />
             <Route path="service-requests/assignment-rules" element={<ServiceRequestAssignmentRules />} />
-            <Route path="service-requests/sla-policies" element={<ServiceRequestSLAPolicies />} />
             <Route path="service-requests/reports" element={<ServiceRequestReports />} />
             <Route path="service-requests/my-requests" element={<ServiceRequestMyRequests />} />
             
@@ -194,19 +185,12 @@ const App = () => {
             <Route path="service-requests/change-management/approvals" element={<ChangeManagementApprovals />} />
             
             <Route path="assets" element={<HelpdeskAssets />} />
-            <Route path="assets/list" element={<AssetsList />} />
             <Route path="assets/detail/:assetId" element={<AssetDetail />} />
-            <Route path="assets/add" element={<AddAsset />} />
-            <Route path="assets/assign" element={<AssignAsset />} />
-            <Route path="assets/return" element={<ReturnAsset />} />
             <Route path="assets/reports" element={<AssetReports />} />
-            <Route path="assets/settings" element={<AssetSettings />} />
             {/* Assets Explore Routes */}
             <Route path="assets/explore/bulk-actions" element={<AssetsBulkActions />} />
-            <Route path="assets/explore/lists" element={<AssetsLists />} />
             <Route path="assets/explore/reports" element={<AssetsReports />} />
             <Route path="assets/tools" element={<AssetsTools />} />
-            <Route path="assets/explore/advanced" element={<AssetsAdvanced />} />
             <Route path="assets/explore/fields-setup" element={<AssetsFieldsSetup />} />
             <Route path="subscription" element={<HelpdeskSubscriptionLayout />}>
               <Route index element={<HelpdeskSubscriptionDashboard />} />

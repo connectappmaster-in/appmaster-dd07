@@ -264,7 +264,7 @@ const AssetReports = () => {
       <div className="px-4 py-6 space-y-6">
         <div>
           
-          <p className="text-muted-foreground mt-2">Generate and download comprehensive asset management reports</p>
+          
         </div>
 
         {isLoading ? <div className="flex items-center justify-center py-12">

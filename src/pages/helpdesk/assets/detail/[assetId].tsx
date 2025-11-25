@@ -301,7 +301,7 @@ const AssetDetail = () => {
                   
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuContent align="end">
                 <DropdownMenuItem onClick={() => handleAction("check_in")}>
                   Check in
                 </DropdownMenuItem>

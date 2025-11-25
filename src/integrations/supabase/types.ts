@@ -3441,6 +3441,156 @@ export type Database = {
         }
         Relationships: []
       }
+      itam_categories: {
+        Row: {
+          code: string
+          created_at: string | null
+          id: number
+          is_active: boolean | null
+          name: string
+          organisation_id: string | null
+          tenant_id: number
+          updated_at: string | null
+        }
+        Insert: {
+          code: string
+          created_at?: string | null
+          id?: number
+          is_active?: boolean | null
+          name: string
+          organisation_id?: string | null
+          tenant_id: number
+          updated_at?: string | null
+        }
+        Update: {
+          code?: string
+          created_at?: string | null
+          id?: number
+          is_active?: boolean | null
+          name?: string
+          organisation_id?: string | null
+          tenant_id?: number
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "itam_categories_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "itam_categories_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      itam_company_info: {
+        Row: {
+          address: string | null
+          company_code: string | null
+          company_name: string
+          created_at: string | null
+          email: string | null
+          id: string
+          organisation_id: string | null
+          phone: string | null
+          tenant_id: number
+          updated_at: string | null
+        }
+        Insert: {
+          address?: string | null
+          company_code?: string | null
+          company_name: string
+          created_at?: string | null
+          email?: string | null
+          id?: string
+          organisation_id?: string | null
+          phone?: string | null
+          tenant_id: number
+          updated_at?: string | null
+        }
+        Update: {
+          address?: string | null
+          company_code?: string | null
+          company_name?: string
+          created_at?: string | null
+          email?: string | null
+          id?: string
+          organisation_id?: string | null
+          phone?: string | null
+          tenant_id?: number
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "itam_company_info_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "itam_company_info_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      itam_departments: {
+        Row: {
+          code: string
+          created_at: string | null
+          id: number
+          is_active: boolean | null
+          name: string
+          organisation_id: string | null
+          tenant_id: number
+          updated_at: string | null
+        }
+        Insert: {
+          code: string
+          created_at?: string | null
+          id?: number
+          is_active?: boolean | null
+          name: string
+          organisation_id?: string | null
+          tenant_id: number
+          updated_at?: string | null
+        }
+        Update: {
+          code?: string
+          created_at?: string | null
+          id?: number
+          is_active?: boolean | null
+          name?: string
+          organisation_id?: string | null
+          tenant_id?: number
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "itam_departments_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "itam_departments_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       itam_license_allocations: {
         Row: {
           allocated_at: string | null
@@ -3550,6 +3700,64 @@ export type Database = {
             columns: ["vendor_id"]
             isOneToOne: false
             referencedRelation: "itam_vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      itam_locations: {
+        Row: {
+          created_at: string | null
+          floor: string | null
+          id: number
+          is_active: boolean | null
+          name: string
+          organisation_id: string | null
+          site_id: number | null
+          tenant_id: number
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          floor?: string | null
+          id?: number
+          is_active?: boolean | null
+          name: string
+          organisation_id?: string | null
+          site_id?: number | null
+          tenant_id: number
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          floor?: string | null
+          id?: number
+          is_active?: boolean | null
+          name?: string
+          organisation_id?: string | null
+          site_id?: number | null
+          tenant_id?: number
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "itam_locations_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "itam_locations_site_id_fkey"
+            columns: ["site_id"]
+            isOneToOne: false
+            referencedRelation: "itam_sites"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "itam_locations_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
             referencedColumns: ["id"]
           },
         ]
@@ -3711,6 +3919,108 @@ export type Database = {
           value?: Json | null
         }
         Relationships: []
+      }
+      itam_sites: {
+        Row: {
+          address: string | null
+          code: string
+          created_at: string | null
+          id: number
+          is_active: boolean | null
+          name: string
+          organisation_id: string | null
+          tenant_id: number
+          updated_at: string | null
+        }
+        Insert: {
+          address?: string | null
+          code: string
+          created_at?: string | null
+          id?: number
+          is_active?: boolean | null
+          name: string
+          organisation_id?: string | null
+          tenant_id: number
+          updated_at?: string | null
+        }
+        Update: {
+          address?: string | null
+          code?: string
+          created_at?: string | null
+          id?: number
+          is_active?: boolean | null
+          name?: string
+          organisation_id?: string | null
+          tenant_id?: number
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "itam_sites_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "itam_sites_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      itam_tag_format: {
+        Row: {
+          auto_increment: boolean | null
+          created_at: string | null
+          current_number: number | null
+          id: string
+          organisation_id: string | null
+          prefix: string
+          start_number: string
+          tenant_id: number
+          updated_at: string | null
+        }
+        Insert: {
+          auto_increment?: boolean | null
+          created_at?: string | null
+          current_number?: number | null
+          id?: string
+          organisation_id?: string | null
+          prefix?: string
+          start_number?: string
+          tenant_id: number
+          updated_at?: string | null
+        }
+        Update: {
+          auto_increment?: boolean | null
+          created_at?: string | null
+          current_number?: number | null
+          id?: string
+          organisation_id?: string | null
+          prefix?: string
+          start_number?: string
+          tenant_id?: number
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "itam_tag_format_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "itam_tag_format_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       itam_vendors: {
         Row: {

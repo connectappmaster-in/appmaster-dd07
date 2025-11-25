@@ -333,30 +333,12 @@ export default function HelpdeskAssets() {
           {/* Explore Tab */}
           <TabsContent value="explore" className="space-y-2 mt-2">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4">
-              {/* Bulk Actions */}
-              <Button variant="outline" className="h-auto py-4 flex-col gap-2" onClick={() => navigate('/helpdesk/assets/explore/bulk-actions')}>
-                <Package className="h-5 w-5" />
-                <div className="text-center">
-                  <div className="font-semibold">Bulk Actions</div>
-                  <div className="text-xs text-muted-foreground">Check Out, Check In, Dispose, Maintenance</div>
-                </div>
-              </Button>
-
-              {/* Lists */}
+              {/* Lists & Reports */}
               <Button variant="outline" className="h-auto py-4 flex-col gap-2" onClick={() => navigate('/helpdesk/assets/explore/lists')}>
                 <Package className="h-5 w-5" />
                 <div className="text-center">
-                  <div className="font-semibold">Lists</div>
-                  <div className="text-xs text-muted-foreground">Maintenances, Warranties</div>
-                </div>
-              </Button>
-
-              {/* Reports */}
-              <Button variant="outline" className="h-auto py-4 flex-col gap-2" onClick={() => navigate('/helpdesk/assets/explore/reports')}>
-                <Package className="h-5 w-5" />
-                <div className="text-center">
-                  <div className="font-semibold">Reports</div>
-                  <div className="text-xs text-muted-foreground">Asset, Audit, Check-Out, Maintenance</div>
+                  <div className="font-semibold">Lists & Reports</div>
+                  <div className="text-xs text-muted-foreground">Maintenances, Warranties, Asset Reports, Audit</div>
                 </div>
               </Button>
 

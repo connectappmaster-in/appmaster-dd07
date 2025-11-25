@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { BackButton } from "@/components/BackButton";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -122,15 +121,11 @@ export default function ToolsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="max-w-7xl mx-auto space-y-8">
-        <div className="flex items-center gap-4">
-          <BackButton />
-          <div>
-            <h1 className="text-3xl font-bold">Asset Management Tools</h1>
-            <p className="text-muted-foreground">Import, export, and manage your IT assets efficiently</p>
-          </div>
-        </div>
+    <div className="space-y-4">
+      <div>
+        <h2 className="text-xl font-semibold">Asset Management Tools</h2>
+        <p className="text-sm text-muted-foreground">Import, export, and manage your IT assets efficiently</p>
+      </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {/* Import / Export */}
@@ -453,7 +448,6 @@ export default function ToolsPage() {
               </Button>
             </CardContent>
           </Card>
-        </div>
       </div>
     </div>
   );

@@ -31,6 +31,7 @@ import AssetDetail from "./pages/helpdesk/assets/detail/[assetId]";
 import AssetReports from "./pages/helpdesk/assets/reports";
 import AllAssets from "./pages/helpdesk/assets/allassets";
 import AssetSetup from "./pages/helpdesk/assets/setup";
+import DepreciationDashboard from "./pages/helpdesk/assets/depreciation/index";
 // Assets Explore imports
 import AssetsBulkActions from "./pages/helpdesk/assets/explore/bulk-actions";
 import AssetsReports from "./pages/helpdesk/assets/explore/reports";
@@ -192,6 +193,7 @@ const App = () => {
             <Route path="assets/reports" element={<AssetReports />} />
             <Route path="assets/tools" element={<AssetsTools />} />
             <Route path="assets/setup" element={<AssetSetup />} />
+            <Route path="assets/depreciation" element={<DepreciationDashboard />} />
             <Route path="assets/explore/fields-setup" element={<AssetsFieldsSetup />} />
             <Route path="subscription" element={<HelpdeskSubscriptionLayout />}>
               <Route index element={<HelpdeskSubscriptionDashboard />} />

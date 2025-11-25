@@ -39,7 +39,7 @@ import RepairsList from "./pages/helpdesk/assets/repairs/index";
 import AssetsBulkActions from "./pages/helpdesk/assets/explore/bulk-actions";
 import AssetsReports from "./pages/helpdesk/assets/explore/reports";
 import AssetsTools from "./pages/helpdesk/assets/tools";
-import AssetsFieldsSetup from "./pages/helpdesk/assets/explore/fields-setup";
+import AssetsFieldsSetup from "./pages/helpdesk/assets/setup/fields-setup";
 import HelpdeskKB from "./pages/helpdesk/kb";
 import HelpdeskProblemDetail from "./pages/helpdesk/problems/[id]";
 import HelpdeskChanges from "./pages/helpdesk/changes";
@@ -200,7 +200,7 @@ const App = () => {
             <Route path="assets/vendors" element={<VendorsList />} />
             <Route path="assets/licenses" element={<LicensesList />} />
             <Route path="assets/repairs" element={<RepairsList />} />
-            <Route path="assets/explore/fields-setup" element={<AssetsFieldsSetup />} />
+            <Route path="assets/setup/fields-setup" element={<AssetsFieldsSetup />} />
             <Route path="subscription" element={<HelpdeskSubscriptionLayout />}>
               <Route index element={<HelpdeskSubscriptionDashboard />} />
               <Route path="tools" element={<HelpdeskSubscriptionTools />} />

@@ -4,31 +4,12 @@ import * as z from "zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Loader2 } from "lucide-react";
-
 const assetSchema = z.object({
   asset_id: z.string().min(1, "Asset ID is required"),
   brand: z.string().min(1, "Brand is required"),
@@ -44,17 +25,17 @@ const assetSchema = z.object({
   location: z.string().optional(),
   category: z.string().min(1, "Category is required"),
   department: z.string().optional(),
-  photo_url: z.string().optional(),
+  photo_url: z.string().optional()
 });
-
 interface CreateAssetDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
-
-export const CreateAssetDialog = ({ open, onOpenChange }: CreateAssetDialogProps) => {
+export const CreateAssetDialog = ({
+  open,
+  onOpenChange
+}: CreateAssetDialogProps) => {
   const queryClient = useQueryClient();
-
   const form = useForm<z.infer<typeof assetSchema>>({
     resolver: zodResolver(assetSchema),
     defaultValues: {
@@ -72,30 +53,26 @@ export const CreateAssetDialog = ({ open, onOpenChange }: CreateAssetDialogProps
       location: "",
       category: "",
       department: "",
-      photo_url: "",
-    },
+      photo_url: ""
+    }
   });
-
   const createAsset = useMutation({
     mutationFn: async (values: z.infer<typeof assetSchema>) => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: {
+          user
+        }
+      } = await supabase.auth.getUser();
       if (!user) throw new Error("Not authenticated");
-
-      const { data: userData } = await supabase
-        .from("users")
-        .select("id, organisation_id")
-        .eq("auth_user_id", user.id)
-        .single();
-
-      const { data: profileData } = await supabase
-        .from("profiles")
-        .select("tenant_id")
-        .eq("id", user.id)
-        .maybeSingle();
+      const {
+        data: userData
+      } = await supabase.from("users").select("id, organisation_id").eq("auth_user_id", user.id).single();
+      const {
+        data: profileData
+      } = await supabase.from("profiles").select("tenant_id").eq("id", user.id).maybeSingle();
 
       // Generate asset tag from asset_id or auto-generate
       const assetTag = values.asset_id || `AST-${Date.now().toString().slice(-6)}`;
-
       const assetData = {
         asset_id: values.asset_id,
         asset_tag: assetTag,
@@ -118,40 +95,44 @@ export const CreateAssetDialog = ({ open, onOpenChange }: CreateAssetDialogProps
         status: "available",
         created_by: userData?.id,
         organisation_id: userData?.organisation_id,
-        tenant_id: profileData?.tenant_id || 1,
+        tenant_id: profileData?.tenant_id || 1
       };
-
-      const { data, error } = await supabase
-        .from("itam_assets")
-        .insert([assetData])
-        .select()
-        .single();
-
+      const {
+        data,
+        error
+      } = await supabase.from("itam_assets").insert([assetData]).select().single();
       if (error) throw error;
       return data;
     },
     onSuccess: () => {
       toast.success("Asset created successfully");
       // Invalidate all asset-related queries
-      queryClient.invalidateQueries({ queryKey: ["itam-assets-list"] });
-      queryClient.invalidateQueries({ queryKey: ["assets-count"] });
-      queryClient.invalidateQueries({ queryKey: ["assets"] });
-      queryClient.invalidateQueries({ queryKey: ["itam-stats"] });
-      queryClient.invalidateQueries({ queryKey: ["itam-assets"] });
+      queryClient.invalidateQueries({
+        queryKey: ["itam-assets-list"]
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["assets-count"]
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["assets"]
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["itam-stats"]
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["itam-assets"]
+      });
       form.reset();
       onOpenChange(false);
     },
     onError: (error: Error) => {
       toast.error("Failed to create asset: " + error.message);
-    },
+    }
   });
-
   const onSubmit = (values: z.infer<typeof assetSchema>) => {
     createAsset.mutate(values);
   };
-
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+  return <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Add New Asset</DialogTitle>
@@ -163,75 +144,55 @@ export const CreateAssetDialog = ({ open, onOpenChange }: CreateAssetDialogProps
             <div>
               <h3 className="text-xs font-semibold mb-1.5 text-muted-foreground uppercase">Basic Info</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                <FormField
-                  control={form.control}
-                  name="asset_id"
-                  render={({ field }) => (
-                    <FormItem>
+                <FormField control={form.control} name="asset_id" render={({
+                field
+              }) => <FormItem>
                       <FormLabel className="text-xs">Asset ID *</FormLabel>
                       <FormControl>
                         <Input className="h-8" {...field} />
                       </FormControl>
                       <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    </FormItem>} />
 
-                <FormField
-                  control={form.control}
-                  name="brand"
-                  render={({ field }) => (
-                    <FormItem>
+                <FormField control={form.control} name="brand" render={({
+                field
+              }) => <FormItem>
                       <FormLabel className="text-xs">Make *</FormLabel>
                       <FormControl>
                         <Input className="h-8" {...field} />
                       </FormControl>
                       <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    </FormItem>} />
 
-                <FormField
-                  control={form.control}
-                  name="model"
-                  render={({ field }) => (
-                    <FormItem>
+                <FormField control={form.control} name="model" render={({
+                field
+              }) => <FormItem>
                       <FormLabel className="text-xs">Model *</FormLabel>
                       <FormControl>
                         <Input className="h-8" {...field} />
                       </FormControl>
                       <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    </FormItem>} />
 
-                <FormField
-                  control={form.control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem>
+                <FormField control={form.control} name="description" render={({
+                field
+              }) => <FormItem>
                       <FormLabel className="text-xs">Description</FormLabel>
                       <FormControl>
                         <Input className="h-8" {...field} />
                       </FormControl>
                       <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    </FormItem>} />
 
-                <FormField
-                  control={form.control}
-                  name="asset_configuration"
-                  render={({ field }) => (
-                    <FormItem className="md:col-span-2">
+                <FormField control={form.control} name="asset_configuration" render={({
+                field
+              }) => <FormItem className="md:col-span-2">
                       <FormLabel className="text-xs">Asset Configuration</FormLabel>
                       <FormControl>
                         <Input className="h-8" {...field} />
                       </FormControl>
                       <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    </FormItem>} />
               </div>
             </div>
 
@@ -239,73 +200,55 @@ export const CreateAssetDialog = ({ open, onOpenChange }: CreateAssetDialogProps
             <div>
               <h3 className="text-xs font-semibold mb-1.5 text-muted-foreground uppercase">Purchase</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                <FormField
-                  control={form.control}
-                  name="purchase_date"
-                  render={({ field }) => (
-                    <FormItem>
+                <FormField control={form.control} name="purchase_date" render={({
+                field
+              }) => <FormItem>
                       <FormLabel className="text-xs">Purchase Date *</FormLabel>
                       <FormControl>
                         <Input type="date" className="h-8" {...field} />
                       </FormControl>
                       <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    </FormItem>} />
 
-                <FormField
-                  control={form.control}
-                  name="cost"
-                  render={({ field }) => (
-                    <FormItem>
+                <FormField control={form.control} name="cost" render={({
+                field
+              }) => <FormItem>
                       <FormLabel className="text-xs">Cost (₹) *</FormLabel>
                       <FormControl>
                         <Input type="number" step="0.01" className="h-8" {...field} />
                       </FormControl>
                       <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    </FormItem>} />
 
-                <FormField
-                  control={form.control}
-                  name="serial_number"
-                  render={({ field }) => (
-                    <FormItem>
+                <FormField control={form.control} name="serial_number" render={({
+                field
+              }) => <FormItem>
                       <FormLabel className="text-xs">Serial No</FormLabel>
                       <FormControl>
                         <Input className="h-8" {...field} />
                       </FormControl>
                       <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    </FormItem>} />
 
-                <FormField
-                  control={form.control}
-                  name="purchased_from"
-                  render={({ field }) => (
-                    <FormItem>
+                <FormField control={form.control} name="purchased_from" render={({
+                field
+              }) => <FormItem>
                       <FormLabel className="text-xs">Purchased From</FormLabel>
                       <FormControl>
                         <Input className="h-8" {...field} />
                       </FormControl>
                       <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    </FormItem>} />
               </div>
             </div>
 
             {/* Classification Section */}
             <div>
-              <h3 className="text-xs font-semibold mb-1.5 text-muted-foreground uppercase">Classification</h3>
+              
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                <FormField
-                  control={form.control}
-                  name="classification"
-                  render={({ field }) => (
-                    <FormItem>
+                <FormField control={form.control} name="classification" render={({
+                field
+              }) => <FormItem>
                       <FormLabel className="text-xs">Asset Classification</FormLabel>
                       <Select value={field.value} onValueChange={field.onChange}>
                         <FormControl>
@@ -320,9 +263,7 @@ export const CreateAssetDialog = ({ open, onOpenChange }: CreateAssetDialogProps
                         </SelectContent>
                       </Select>
                       <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    </FormItem>} />
               </div>
             </div>
 
@@ -330,39 +271,29 @@ export const CreateAssetDialog = ({ open, onOpenChange }: CreateAssetDialogProps
             <div>
               <h3 className="text-xs font-semibold mb-1.5 text-muted-foreground uppercase">Organization</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                <FormField
-                  control={form.control}
-                  name="site"
-                  render={({ field }) => (
-                    <FormItem>
+                <FormField control={form.control} name="site" render={({
+                field
+              }) => <FormItem>
                       <FormLabel className="text-xs">Site</FormLabel>
                       <FormControl>
                         <Input className="h-8" {...field} />
                       </FormControl>
                       <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    </FormItem>} />
 
-                <FormField
-                  control={form.control}
-                  name="location"
-                  render={({ field }) => (
-                    <FormItem>
+                <FormField control={form.control} name="location" render={({
+                field
+              }) => <FormItem>
                       <FormLabel className="text-xs">Location</FormLabel>
                       <FormControl>
                         <Input className="h-8" {...field} />
                       </FormControl>
                       <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    </FormItem>} />
 
-                <FormField
-                  control={form.control}
-                  name="category"
-                  render={({ field }) => (
-                    <FormItem>
+                <FormField control={form.control} name="category" render={({
+                field
+              }) => <FormItem>
                       <FormLabel className="text-xs">Category *</FormLabel>
                       <Select value={field.value} onValueChange={field.onChange}>
                         <FormControl>
@@ -384,56 +315,36 @@ export const CreateAssetDialog = ({ open, onOpenChange }: CreateAssetDialogProps
                         </SelectContent>
                       </Select>
                       <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    </FormItem>} />
 
-                <FormField
-                  control={form.control}
-                  name="department"
-                  render={({ field }) => (
-                    <FormItem>
+                <FormField control={form.control} name="department" render={({
+                field
+              }) => <FormItem>
                       <FormLabel className="text-xs">Department</FormLabel>
                       <FormControl>
                         <Input className="h-8" {...field} />
                       </FormControl>
                       <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    </FormItem>} />
               </div>
             </div>
 
             {/* Photo Section */}
             <div>
               <h3 className="text-xs font-semibold mb-1.5 text-muted-foreground uppercase">Photo (Optional)</h3>
-              <FormField
-                control={form.control}
-                name="photo_url"
-                render={({ field }) => (
-                  <FormItem>
+              <FormField control={form.control} name="photo_url" render={({
+              field
+            }) => <FormItem>
                     <FormLabel className="text-xs">Add Image</FormLabel>
                     <FormControl>
-                      <Input 
-                        type="text" 
-                        className="h-8"
-                        {...field} 
-                      />
+                      <Input type="text" className="h-8" {...field} />
                     </FormControl>
                     <FormMessage />
-                  </FormItem>
-                )}
-              />
+                  </FormItem>} />
             </div>
 
             <div className="flex justify-end gap-2 pt-2 border-t">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => onOpenChange(false)}
-                disabled={createAsset.isPending}
-              >
+              <Button type="button" variant="outline" size="sm" onClick={() => onOpenChange(false)} disabled={createAsset.isPending}>
                 Cancel
               </Button>
               <Button type="submit" size="sm" disabled={createAsset.isPending}>
@@ -444,6 +355,5 @@ export const CreateAssetDialog = ({ open, onOpenChange }: CreateAssetDialogProps
           </form>
         </Form>
       </DialogContent>
-    </Dialog>
-  );
+    </Dialog>;
 };

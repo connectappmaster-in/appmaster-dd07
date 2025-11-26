@@ -13,9 +13,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Loader2, ImagePlus } from "lucide-react";
 import { ImagePickerDialog } from "./ImagePickerDialog";
 import { useAssetSetupConfig } from "@/hooks/useAssetSetupConfig";
-import { useTagSuggestions } from "@/hooks/useTagSuggestions";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
 const assetSchema = z.object({
   asset_id: z.string().min(1, "Asset ID is required"),
   brand: z.string().min(1, "Make is required"),
@@ -43,9 +40,7 @@ export const CreateAssetDialog = ({
 }: CreateAssetDialogProps) => {
   const queryClient = useQueryClient();
   const [imagePickerOpen, setImagePickerOpen] = useState(false);
-  const [suggestionsOpen, setSuggestionsOpen] = useState(false);
   const { sites, locations, categories, departments } = useAssetSetupConfig();
-  const { data: tagSuggestions = [] } = useTagSuggestions();
   const form = useForm<z.infer<typeof assetSchema>>({
     resolver: zodResolver(assetSchema),
     defaultValues: {
@@ -158,42 +153,9 @@ export const CreateAssetDialog = ({
                 field
               }) => <FormItem>
                       <FormLabel className="text-xs">Asset ID *</FormLabel>
-                      <Popover open={suggestionsOpen} onOpenChange={setSuggestionsOpen}>
-                        <PopoverTrigger asChild>
-                          <FormControl>
-                            <Input 
-                              className="h-8" 
-                              {...field} 
-                              onFocus={() => setSuggestionsOpen(true)}
-                              placeholder="Click to see suggestions"
-                            />
-                          </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-80 p-0" align="start">
-                          <Command>
-                            <CommandList>
-                              <CommandEmpty>No tag suggestions available.</CommandEmpty>
-                              {tagSuggestions.map((series: any) => (
-                                <CommandGroup key={series.category_name} heading={series.category_name}>
-                                  {series.suggested_tags?.map((tag: string) => (
-                                    <CommandItem
-                                      key={tag}
-                                      value={tag}
-                                      onSelect={() => {
-                                        form.setValue("asset_id", tag);
-                                        setSuggestionsOpen(false);
-                                      }}
-                                      className="font-mono"
-                                    >
-                                      {tag}
-                                    </CommandItem>
-                                  ))}
-                                </CommandGroup>
-                              ))}
-                            </CommandList>
-                          </Command>
-                        </PopoverContent>
-                      </Popover>
+                      <FormControl>
+                        <Input className="h-8" {...field} />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>} />
 
